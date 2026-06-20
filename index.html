@@ -26,14 +26,17 @@
   main{position:relative;z-index:2}
 
   /* ---------- magnifier loupe ---------- */
-  .lens{position:fixed;top:0;left:0;width:132px;height:132px;border-radius:50%;overflow:hidden;z-index:9998;
+  .lens{position:fixed;top:0;left:0;width:160px;height:160px;border-radius:50%;overflow:hidden;z-index:9998;
     pointer-events:none;background:var(--ink);display:none;
-    box-shadow:0 0 0 2px rgba(52,231,231,.55), 0 0 0 7px rgba(7,11,18,.55), 0 20px 55px rgba(0,0,0,.55), inset 0 0 34px rgba(0,0,0,.6)}
+    box-shadow:0 0 0 2px rgba(255,255,255,.7), 0 0 0 7px rgba(7,11,18,.55), 0 20px 55px rgba(0,0,0,.55), inset 0 0 34px rgba(0,0,0,.6);
+    transition:box-shadow .2s ease}
+  .lens.hovering-link{box-shadow:0 0 0 2px rgba(52,231,231,.9), 0 0 12px rgba(52,231,231,.4), 0 0 0 7px rgba(7,11,18,.55), 0 20px 55px rgba(0,0,0,.55), inset 0 0 34px rgba(0,0,0,.6)}
   .lens.on{display:block}
   .lens-inner{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
   .lens::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
     background:radial-gradient(circle at 33% 26%,rgba(255,255,255,.16),transparent 42%);
-    box-shadow:inset 0 0 26px rgba(52,231,231,.16)}
+    box-shadow:inset 0 0 26px rgba(255,255,255,.08);transition:box-shadow .2s ease}
+  .lens.hovering-link::after{box-shadow:inset 0 0 26px rgba(52,231,231,.16)}
 
   /* ---------- top bar ---------- */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;
@@ -58,7 +61,7 @@
   .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:120px clamp(46px,7vw,110px) 60px;position:relative}
   .hero .tag{font-family:var(--mono);font-size:clamp(11px,1.1vw,13px);letter-spacing:.2em;color:var(--dim);margin-bottom:24px;text-transform:uppercase;overflow:hidden}
   .hero .tag span{display:inline-block;transform:translateY(110%);animation:rise .9s var(--ease) .2s forwards}
-  .display{font-weight:700;line-height:.82;letter-spacing:-.02em;text-transform:uppercase;font-size:clamp(64px,16.5vw,260px)}
+  .display{font-weight:700;line-height:.82;letter-spacing:-.02em;text-transform:uppercase;font-size:clamp(64px,16.5vw,260px);position:relative;z-index:1}
   .display .row{display:block;overflow:hidden}
   .display .row .ch{display:inline-block;transform:translateY(110%);background:linear-gradient(100deg,var(--cyan),var(--blue) 45%,var(--indigo));-webkit-background-clip:text;background-clip:text;color:transparent;will-change:transform}
   .display .row .ch.in{animation:rise 1s var(--ease) forwards}
@@ -76,7 +79,7 @@
   .marquee b{font-family:var(--disp);font-weight:700;font-size:clamp(18px,2.4vw,30px);text-transform:uppercase;letter-spacing:.01em;padding:0 26px;color:#dbe6f7}
   .marquee b .dot{color:var(--cyan);margin-left:52px}
 
-  .sec{padding:clamp(80px,11vw,160px) 0}
+  .sec{padding:clamp(80px,11vw,160px) 0;position:relative}
   .reveal{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
   .reveal.in{opacity:1;transform:none}
   .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
@@ -112,21 +115,27 @@
 
   .stack .scan-hint{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.04em;margin-top:20px}
   .stack .cols{margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
-  .col{background:var(--panel);padding:24px 20px;min-height:212px;position:relative;transition:background .4s var(--ease),box-shadow .4s var(--ease)}
-  .col h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--cyan);text-transform:uppercase;position:relative;z-index:4}
-  .col h4::after{content:"+";float:right;color:var(--dimmer);transition:transform .4s var(--ease),color .3s}
-  .col .items{position:relative;z-index:1;margin-top:14px;opacity:.07;filter:blur(5px);transform:translateY(6px);transition:opacity .45s var(--ease),filter .45s var(--ease),transform .45s var(--ease)}
-  .col .items ul{list-style:none}
-  .col .items li{font-family:var(--mono);font-size:13.5px;color:#bcd0ec;padding:7px 0;border-bottom:1px dashed rgba(38,52,79,.6)}
-  .col .items li:last-child{border-bottom:none}
-  .col:hover{background:#0f1a2e;box-shadow:inset 0 2px 0 var(--cyan)}
-  .col:hover h4::after,.cols.pinned .col h4::after{transform:rotate(45deg);color:var(--cyan)}
-  .col:hover .items,.cols.pinned .col .items{opacity:1;filter:none;transform:none}
-  .scan-ring{position:absolute;left:0;top:0;width:150px;height:150px;border-radius:50%;pointer-events:none;z-index:5;
+  .col{background:var(--panel);padding:24px 20px;min-height:260px;position:relative;overflow:hidden;transition:background .4s var(--ease)}
+  .col-title{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--cyan);text-transform:uppercase;
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:6;pointer-events:none;
+    transition:opacity .4s var(--ease),transform .4s var(--ease)}
+  .col.exploring .col-title{opacity:0;transform:translate(-50%,-50%) scale(.8)}
+  .col.pinned .col-title{opacity:0;transform:translate(-50%,-50%) scale(.8)}
+  .tech-item{position:absolute;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;color:#bcd0ec;
+    opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .01s;z-index:3}
+  .tech-item img{width:22px;height:22px;filter:drop-shadow(0 0 6px rgba(52,231,231,.3))}
+  .col.exploring .tech-item{pointer-events:auto}
+  .col.pinned .tech-item{opacity:1!important;position:relative;top:auto!important;left:auto!important;
+    margin:10px 0;pointer-events:auto;transition:opacity .4s var(--ease)}
+  .col.pinned{display:flex;flex-direction:column;padding-top:40px}
+  .col-pinned-title{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--cyan);text-transform:uppercase;
+    margin-bottom:12px;display:none}
+  .col.pinned .col-pinned-title{display:block}
+  .stack-ring{position:absolute;left:0;top:0;width:160px;height:160px;border-radius:50%;pointer-events:none;z-index:7;
     border:1px solid rgba(52,231,231,.45);box-shadow:0 0 26px rgba(52,231,231,.12),inset 0 0 22px rgba(52,231,231,.06);
-    opacity:0;transition:opacity .3s}
-  .cols.scanning .scan-ring{opacity:1}
-  .cols.pinned .scan-ring{opacity:0!important}
+    opacity:0;transition:opacity .3s;transform:translate(-50%,-50%)}
+  .col.exploring .stack-ring{opacity:1}
+  .col.pinned .stack-ring{opacity:0!important}
   @media (max-width:820px){.stack .cols{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:460px){.stack .cols{grid-template-columns:1fr}}
 
@@ -148,13 +157,11 @@
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important}
     .reveal{opacity:1;transform:none}.display .row .ch{transform:none}.hero .tag span{transform:none}
-    canvas#bg{display:none}.lens{display:none!important}.fact{display:none!important}
+    canvas#bg{display:none}.lens{display:none!important}
   }
   .rot{transition:opacity .35s var(--ease)}
   .rotline{font-family:var(--mono);font-size:clamp(12px,1.2vw,14px);letter-spacing:.06em;color:var(--dim);margin-top:14px}
   .rotline .rot{color:var(--cyan)}
-  .fact{position:fixed;z-index:60;pointer-events:none;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--cyan);opacity:0;white-space:nowrap;transform:translate(-50%,0);text-shadow:0 0 12px rgba(52,231,231,.45)}
-  .fact.go{animation:factrise 1.5s var(--ease) forwards}
   .work{position:relative}
   .work .wrap{position:relative;z-index:1}
   .work .bignum{position:absolute;top:clamp(70px,9vw,150px);right:clamp(8px,4vw,60px);font-family:var(--disp);font-weight:700;font-size:clamp(120px,22vw,330px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(91,141,239,.18);pointer-events:none;opacity:0;transform:translateY(24px);transition:opacity .5s var(--ease),transform .5s var(--ease);z-index:0}
@@ -162,17 +169,36 @@
   @media (max-width:820px){.work .bignum{display:none}}
   .proj .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
   .proj .chips b{font-family:var(--mono);font-weight:400;font-size:11px;color:#9fe3e3;padding:5px 11px;border:1px solid var(--line2);border-radius:30px;background:rgba(52,231,231,.05)}
-  .col h4 .live{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:8px;vertical-align:middle;animation:pulse 2.2s ease-in-out infinite}
-  .col .items li{padding-left:16px;position:relative;transform:translateX(-6px)}
-  .col .items li::before{content:"";position:absolute;left:0;top:50%;width:7px;height:1px;background:var(--blue);transform:translateY(-50%) scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
-  .col:hover .items li,.cols.pinned .items li{transform:translateX(0)}
-  .col:hover .items li::before,.cols.pinned .items li::before{transform:translateY(-50%) scaleX(1)}
-  .col:hover .items li:nth-child(2){transition-delay:.04s}
-  .col:hover .items li:nth-child(3){transition-delay:.08s}
-  .col:hover .items li:nth-child(4){transition-delay:.12s}
-  .col:hover .items li:nth-child(5){transition-delay:.16s}
-  @keyframes factrise{0%{opacity:0;transform:translate(-50%,4px)}18%{opacity:.5}100%{opacity:0;transform:translate(-50%,-46px)}}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .secret{position:absolute;font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--cyan);white-space:nowrap;
+    pointer-events:none;opacity:0;padding-left:11px;border-left:2px solid var(--cyan);text-shadow:0 0 16px rgba(52,231,231,.55);z-index:3;
+    transition:opacity .4s var(--ease),transform .4s var(--ease)}
+  .secret.revealed{opacity:1!important;pointer-events:auto;transform:scale(1.1) translateX(6px);z-index:9990;
+    background:rgba(7,11,18,.92);padding:8px 16px 8px 14px;border-radius:6px;font-size:14px;
+    box-shadow:0 0 30px rgba(52,231,231,.25),0 4px 20px rgba(0,0,0,.5);
+    animation:revealGlow 4.5s ease-in-out forwards}
+  @keyframes revealGlow{0%{opacity:1;transform:scale(1.05) translateX(4px);text-shadow:0 0 24px rgba(52,231,231,.9)}
+    80%{opacity:1;transform:scale(1.05) translateX(4px);text-shadow:0 0 14px rgba(52,231,231,.6)}
+    100%{opacity:0;transform:scale(1) translateX(0);text-shadow:0 0 0 transparent}}
+  .snum{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;
+    background:rgba(52,231,231,.15);border:1px solid var(--cyan);font-size:10px;font-weight:700;color:var(--cyan);margin-right:6px;flex-shrink:0}
+  .lens-inner .secret{opacity:1!important;animation:secretPulse 2s ease-in-out infinite}
+  @keyframes secretPulse{0%,100%{text-shadow:0 0 16px rgba(52,231,231,.55)}50%{text-shadow:0 0 24px rgba(52,231,231,.9)}}
+
+  /* ---------- unlock popup ---------- */
+  .unlock-overlay{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+    background:rgba(7,11,18,.92);opacity:0;pointer-events:none;transition:opacity .5s var(--ease);backdrop-filter:blur(8px)}
+  .unlock-overlay.show{opacity:1;pointer-events:auto}
+  .unlock-box{text-align:center;transform:scale(.85) translateY(20px);transition:transform .6s var(--ease);max-width:520px;padding:40px}
+  .unlock-overlay.show .unlock-box{transform:none}
+  .unlock-box .icon{font-size:48px;margin-bottom:20px;animation:unlockBounce .6s var(--ease)}
+  .unlock-box h3{font-family:var(--mono);font-size:14px;letter-spacing:.15em;color:var(--cyan);text-transform:uppercase;margin-bottom:14px}
+  .unlock-box p{font-size:clamp(18px,2.5vw,28px);font-weight:600;line-height:1.3;color:var(--text)}
+  .unlock-box p em{font-style:normal;background:linear-gradient(100deg,var(--cyan),var(--indigo));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .unlock-box .sub{margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.04em}
+  .unlock-box .dismiss{margin-top:28px;font-family:var(--mono);font-size:11px;color:var(--dimmer);letter-spacing:.08em;cursor:pointer;
+    padding:8px 18px;border:1px solid var(--line2);border-radius:30px;background:transparent;color:var(--dim);transition:border-color .3s,color .3s}
+  .unlock-box .dismiss:hover{border-color:var(--cyan);color:var(--cyan)}
+  @keyframes unlockBounce{0%{transform:scale(0) rotate(-20deg)}60%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
   @keyframes rise{to{transform:translateY(0)}}
   @keyframes sweep{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
   @keyframes scrollx{to{transform:translateX(-50%)}}
@@ -199,6 +225,7 @@
 <main>
   <section class="hero" id="top">
     <div class="tag"><span>/ Backend &amp; Distributed-Systems Engineer</span></div>
+    <div class="secret" style="position:relative;margin-top:-18px;margin-bottom:12px;margin-left:420px;white-space:nowrap">psst &#8212; you found the x-ray lens</div>
     <h1 class="display" aria-label="Vansh Gupta">
       <span class="row" data-word="VANSH"></span>
       <span class="row" data-word="GUPTA"></span>
@@ -209,6 +236,10 @@
       <div><b>SMARTSHEET</b> / SDE</div><div>EX &#8212; FUTURES FIRST</div><div>CODEFORCES / EXPERT</div><div>BASED IN CHENNAI, IN</div>
     </div>
     <div class="scrollcue"><span class="bar"></span> SCROLL</div>
+    <div class="secret numbered" data-num="1" style="top:20%;left:62%"><span class="snum">1</span> // first principles > frameworks</div>
+    <div class="secret numbered" data-num="2" style="top:34%;left:72%"><span class="snum">2</span> p99 once lived under 40&#181;s</div>
+    <div class="secret numbered" data-num="3" style="top:54%;left:64%"><span class="snum">3</span> // likes pagers quiet at 3am</div>
+    <div class="secret numbered" data-num="4" style="top:70%;left:59%"><span class="snum">4</span> quite honestly, this was vibe coded</div>
   </section>
 
   <div class="marquee" aria-hidden="true">
@@ -235,8 +266,8 @@
         <div class="stats reveal d2">
           <div class="stat"><div class="n" data-count="1600">0<span class="suf">+</span></div><div class="l">Codeforces rating &#183; Expert</div></div>
           <div class="stat"><div class="n">#<span data-count="850">0</span></div><div class="l">Global rank &#183; Round 896 (Div.2)</div></div>
-          <div class="stat"><div class="n" data-count="50">0<span class="suf">K+</span></div><div class="l">Records load-tested &#183; Dynamics</div></div>
-          <div class="stat"><div class="n" data-count="2">0</div><div class="l">Production connectors shipped</div></div>
+          <div class="stat"><div class="n" data-count="5">0<span class="suf">M+</span></div><div class="l">Records load-tested &#183; Dynamics</div><div class="secret" style="position:relative;white-space:normal;margin-top:8px;font-size:11px;line-height:1.4">ask me about the 5M-row load test</div></div>
+          <div class="stat"><div class="n" data-count="2">0</div><div class="l">Production connectors shipped</div><div class="secret connector-secret" style="position:relative;white-space:normal;margin-top:8px;font-size:11px;line-height:1.4">Dynamics 365, ServiceNow (+1 in progress)</div></div>
         </div>
       </div>
     </div>
@@ -245,28 +276,62 @@
   <section class="sec work" id="work">
     <div class="bignum" id="bignum" aria-hidden="true">01</div>
     <div class="wrap">
-      <div class="eyebrow reveal"><b>00.2</b> / selected work <span class="ln"></span></div>
+      <div class="eyebrow reveal" style="position:relative"><b>00.2</b> / selected work <span class="ln"></span><span class="secret" style="position:absolute;left:280px;top:0;white-space:nowrap">// I commit to GitLab &#8212; hence the quiet GitHub</span></div>
       <div class="list">
-        <a class="proj reveal" href="#contact"><span class="code">oo1</span><span class="ttl">Connectors 3.0 <span class="arrow">&#8594;</span></span><span class="yr">2025 — Smartsheet</span><span class="desc">Bi-directional enterprise data sync — Dynamics 365 &amp; ServiceNow connectors built on Nango, load-tested to 50k+ records.<span class="stk">Java &#183; Spring Boot &#183; AWS (ECS Fargate) &#183; MySQL &#183; Nango</span><span class="chips"><b>50K+ records</b><b>bi-directional</b><b>Nango</b></span></span></a>
-        <a class="proj reveal" href="aeron-kafka.html"><span class="code">oo2</span><span class="ttl">Event-Driven Replication <span class="arrow">&#8594;</span></span><span class="yr">2024 — Futures First</span><span class="desc">Replaced Aeron middleware on trading servers with a Kafka + RocksDB replication layer — replayable, fault-tolerant, cleaner recovery.<span class="stk">C++ &#183; Kafka &#183; RocksDB &#183; gRPC &#183; read the case study &#8594;</span><span class="chips"><b>Aeron &#8594; Kafka</b><b>replayable</b><b>fault-tolerant</b></span></span></a>
-        <a class="proj reveal" href="#contact"><span class="code">oo3</span><span class="ttl">MCP Tooling <span class="arrow">&#8594;</span></span><span class="yr">2025 — Smartsheet</span><span class="desc">Model Context Protocol servers exposing internal APIs as tools for LLM-powered automation pipelines.<span class="stk">Java &#183; MCP &#183; n8n &#183; Nango</span><span class="chips"><b>LLM tools</b><b>internal APIs</b><b>n8n</b></span></span></a>
+        <div class="proj reveal"><span class="code">oo1</span><span class="ttl">Connectors 3.0</span><span class="yr">2025 — Smartsheet</span><span class="desc">Bi-directional enterprise data sync — Dynamics 365 &amp; ServiceNow connectors built on Nango, load-tested to 5M+ records.<span class="stk">Java &#183; Spring Boot &#183; AWS (ECS Fargate) &#183; MySQL &#183; Nango</span><span class="chips"><b>5M+ records</b><b>bi-directional</b><b>Nango</b></span></span></div>
+        <div class="proj reveal"><span class="code">oo2<span class="secret" style="position:relative;display:block;margin-top:4px;white-space:nowrap">Aeron&#8594;Kafka = my favorite war story</span></span><span class="ttl">Event-Driven Replication</span><span class="yr">2024 — Futures First</span><span class="desc">Replaced Aeron middleware on trading servers with a Kafka + RocksDB replication layer — replayable, fault-tolerant, cleaner recovery.<span class="stk">C++ &#183; Kafka &#183; RocksDB &#183; gRPC</span><span class="chips"><b>Aeron &#8594; Kafka</b><b>replayable</b><b>fault-tolerant</b></span></span></div>
+        <div class="proj reveal"><span class="code">oo3</span><span class="ttl">MCP Tooling</span><span class="yr">2025 — Smartsheet</span><span class="desc">Model Context Protocol servers exposing internal APIs as tools for LLM-powered automation pipelines.<span class="stk">Java &#183; MCP &#183; n8n &#183; Nango</span><span class="chips"><b>LLM tools</b><b>internal APIs</b><b>n8n</b></span></span></div>
         <a class="proj reveal" href="https://github.com/vansh482" target="_blank" rel="noopener"><span class="code">oo4</span><span class="ttl">Terminal Profile <span class="arrow">&#8599;</span></span><span class="yr">2026 — Personal</span><span class="desc">A self-describing, hand-built animated terminal + telemetry banner for my GitHub profile — pure SVG/SMIL, no libraries.<span class="stk">SVG &#183; SMIL &#183; CSS &#183; a lot of patience</span><span class="chips"><b>pure SVG/SMIL</b><b>0 libraries</b></span></span></a>
       </div>
+      <div class="secret" style="position:relative;margin-top:16px;white-space:nowrap">~2 yrs shipping production systems</div>
     </div>
   </section>
 
   <section class="sec stack" id="stack">
     <div class="wrap">
       <div class="eyebrow reveal"><b>00.3</b> / stack <span class="ln"></span></div>
-      <div class="scan-hint reveal d1">// hover a column to reveal its stack &#183; click to pin everything open</div>
+      <div class="scan-hint reveal d1">// hover to scan &#183; click to pin</div>
       <div class="cols reveal d1" id="cols">
-        <div class="col"><h4>Languages<span class="live"></span></h4><div class="items"><ul><li>Java</li><li>C++</li><li>Python</li><li>SQL</li></ul></div></div>
-        <div class="col"><h4>Backend / Streaming<span class="live"></span></h4><div class="items"><ul><li>Spring Boot</li><li>gRPC</li><li>Kafka</li><li>RocksDB</li><li>Aeron</li></ul></div></div>
-        <div class="col"><h4>Cloud / DevOps<span class="live"></span></h4><div class="items"><ul><li>AWS</li><li>Docker</li><li>Kubernetes</li><li>Terraform</li></ul></div></div>
-        <div class="col"><h4>Data / Observability<span class="live"></span></h4><div class="items"><ul><li>MySQL</li><li>PostgreSQL</li><li>MongoDB</li><li>Datadog</li></ul></div></div>
-        <div class="scan-ring" aria-hidden="true"></div>
+        <div class="col" data-col="languages">
+          <span class="col-title">Languages</span>
+          <span class="col-pinned-title">Languages</span>
+          <div class="tech-item" style="top:18%;left:12%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java"><span>Java</span></div>
+          <div class="tech-item" style="top:55%;left:52%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++"><span>C++</span></div>
+          <div class="tech-item" style="top:72%;left:18%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
+          <div class="tech-item" style="top:35%;left:58%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="SQL"><span>SQL</span></div>
+          <div class="stack-ring" aria-hidden="true"></div>
+        </div>
+        <div class="col" data-col="backend">
+          <span class="col-title">Backend / Streaming</span>
+          <span class="col-pinned-title">Backend / Streaming</span>
+          <div class="tech-item" style="top:15%;left:22%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot"><span>Spring Boot</span></div>
+          <div class="tech-item" style="top:42%;left:8%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grpc/grpc-original.svg" alt="gRPC"><span>gRPC</span></div>
+          <div class="tech-item" style="top:68%;left:45%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg" alt="Kafka"><span>Kafka</span></div>
+          <div class="tech-item" style="top:28%;left:55%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rocksdb/rocksdb-plain.svg" alt="RocksDB"><span>RocksDB</span></div>
+          <div class="tech-item" style="top:82%;left:20%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/adonisjs/adonisjs-original.svg" alt="Aeron"><span>Aeron</span></div>
+          <div class="stack-ring" aria-hidden="true"></div>
+        </div>
+        <div class="col" data-col="cloud">
+          <span class="col-title">Cloud / DevOps</span>
+          <span class="col-pinned-title">Cloud / DevOps</span>
+          <div class="tech-item" style="top:20%;left:35%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS"><span>AWS</span></div>
+          <div class="tech-item" style="top:50%;left:12%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker"><span>Docker</span></div>
+          <div class="tech-item" style="top:75%;left:48%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" alt="Kubernetes"><span>Kubernetes</span></div>
+          <div class="tech-item" style="top:38%;left:60%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" alt="Terraform"><span>Terraform</span></div>
+          <div class="stack-ring" aria-hidden="true"></div>
+        </div>
+        <div class="col" data-col="data">
+          <span class="col-title">Data / Observability</span>
+          <span class="col-pinned-title">Data / Observability</span>
+          <div class="tech-item" style="top:22%;left:15%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL"><span>MySQL</span></div>
+          <div class="tech-item" style="top:48%;left:50%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL"><span>PostgreSQL</span></div>
+          <div class="tech-item" style="top:72%;left:25%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB"><span>MongoDB</span></div>
+          <div class="tech-item" style="top:35%;left:55%"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/datadog/datadog-original.svg" alt="Datadog"><span>Datadog</span></div>
+          <div class="stack-ring" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
+    <div class="secret" style="top:30%;left:62%">also: Linux &#183; Git &#183; Bash &#183; Redis</div>
   </section>
 
   <section class="sec contact" id="contact">
@@ -274,18 +339,28 @@
       <div class="eyebrow reveal"><b>00.4</b> / contact <span class="ln"></span></div>
       <div class="big reveal" style="margin-top:30px">
         <div>LET'S BUILD</div>
-        <div>SOMETHING THAT <a href="mailto:vansh012345gupta@gmail.com" class="magnetic">STAYS UP&#8599;</a></div>
+        <div>SOMETHING THAT <a href="mailto:vansh012345gupta@gmail.com" class="magnetic">STAYS UP&#8599;</a> <span class="secret" style="position:relative;font-size:12px;white-space:nowrap;vertical-align:middle">// I tune JVMs for fun</span></div>
       </div>
       <div class="cfoot">
-        <div><div class="k">Mail</div><a href="mailto:vansh012345gupta@gmail.com">vansh012345gupta@gmail.com</a></div>
+        <div><div class="k">Mail</div><a href="mailto:vansh012345gupta@gmail.com">vansh012345gupta@gmail.com</a><div class="secret" style="position:relative;margin-top:8px;white-space:nowrap;font-size:11px;line-height:1.6">replies fast · open to L4 / E4 / SDE II</div></div>
         <div><div class="k">Elsewhere</div><a href="https://www.linkedin.com/in/vansh-vg/" target="_blank" rel="noopener">LinkedIn &#8599;</a><a href="https://github.com/vansh482" target="_blank" rel="noopener">GitHub &#8599;</a><a href="https://codeforces.com/profile/YOUR_CF_HANDLE" target="_blank" rel="noopener">Codeforces &#8599;</a></div>
         <div class="clock"><div class="k">Local time</div><div><b id="clock">--:--:--</b></div><div id="date" style="margin-top:6px">--/--/----</div></div>
-        <div><div class="k">Status</div><div style="color:var(--green)">&#9679; open to hard problems</div><div style="margin-top:8px">&#169; 2026 Vansh Gupta</div></div>
+        <div><div class="k">Status</div><div style="color:var(--green)">&#9679; open to hard problems</div><div style="margin-top:8px">&#169; 2026 Vansh Gupta</div><div class="secret" style="position:relative;margin-top:8px;white-space:normal;font-size:11px;line-height:1.6">&#9679; reads DDIA for fun</div></div>
       </div>
       <div class="cfoot-note">Background &#8212; B.Tech CSE, The LNMIIT &#183; JEE Advanced AIR 9684 (2020)</div>
     </div>
   </section>
 </main>
+
+<div class="unlock-overlay" id="unlockOverlay">
+  <div class="unlock-box">
+    <div class="icon">&#127942;</div>
+    <h3>// secret unlocked</h3>
+    <p>You found all 4. <em>Quite honestly, this entire section was vibe coded from a wild idea at 2am.</em></p>
+    <div class="sub">fun fact: the magnifier clones the entire DOM every frame &#183; don't tell the perf team</div>
+    <button class="dismiss" onclick="document.getElementById('unlockOverlay').classList.remove('show')">[ close ]</button>
+  </div>
+</div>
 
 <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
 <script>
@@ -293,7 +368,14 @@
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var canHover=matchMedia('(hover:hover)').matches;
   var mouseX=innerWidth/2, mouseY=innerHeight/2;
-  addEventListener('mousemove',function(e){mouseX=e.clientX;mouseY=e.clientY;});
+  addEventListener('mousemove',function(e){
+    mouseX=e.clientX;mouseY=e.clientY;
+    if(lensEl){
+      var hovered=document.elementFromPoint(e.clientX,e.clientY);
+      var isClickable=hovered&&(hovered.tagName==='A'||hovered.tagName==='BUTTON'||hovered.closest('a')||hovered.closest('button')||hovered.closest('[onclick]')||getComputedStyle(hovered).cursor==='pointer');
+      lensEl.classList.toggle('hovering-link',!!isClickable);
+    }
+  });
 
   /* hero letters */
   document.querySelectorAll('.display .row').forEach(function(row,ri){
@@ -329,21 +411,8 @@
   /* ambient: rotating hero line */
   var ROT=['currently @ Smartsheet','Codeforces Expert / 1600+','ex-Futures First / C++','low-latency, fault-tolerant','based in Chennai, IN','Kafka / RocksDB / replication'];
   var rotEl=document.getElementById('rot'),ridx=0;
-  if(rotEl)setInterval(function(){ridx=(ridx+1)%ROT.length;rotEl.style.opacity='0';setTimeout(function(){rotEl.textContent=ROT[ridx];rotEl.style.opacity='1';},350);},2700);
+  if(rotEl)setInterval(function(){ridx=(ridx+1)%ROT.length;rotEl.style.opacity='0';setTimeout(function(){rotEl.textContent=ROT[ridx];rotEl.style.opacity='1';var lr=lensInner&&lensInner.querySelector('.rot');if(lr)lr.textContent=ROT[ridx];},350);},2700);
 
-  /* ambient: cursor fact-trail */
-  if(!reduce&&canHover){
-    var FACTS=['Codeforces Expert','1600+ rated','ex-Futures First','low-latency C++','Kafka','RocksDB','event-driven','fault-tolerant','Spring Boot','distributed systems','Chennai, IN','Smartsheet','replication','gRPC','microseconds','Dynamics 365','ServiceNow','Nango','stays up when things break','AWS','JEE AIR 9684'];
-    for(var z=FACTS.length-1;z>0;z--){var w=Math.floor(Math.random()*(z+1));var tmp=FACTS[z];FACTS[z]=FACTS[w];FACTS[w]=tmp;}
-    var fidx=0,flast=0;
-    addEventListener('mousemove',function(e){
-      var now=performance.now();if(now-flast<230)return;flast=now;
-      var f=document.createElement('div');f.className='fact';f.textContent=FACTS[fidx%FACTS.length];fidx++;
-      f.style.left=(e.clientX+(Math.random()*44-22))+'px';f.style.top=(e.clientY-16)+'px';
-      document.body.appendChild(f);requestAnimationFrame(function(){f.classList.add('go');});
-      setTimeout(function(){f.remove();},1550);
-    });
-  }
 
   /* work: big ghost index follows hovered row */
   var bignum=document.getElementById('bignum');
@@ -359,19 +428,29 @@
     var id=a.getAttribute('href');if(id.length>1){var t=document.querySelector(id);if(t){e.preventDefault();if(lenis)lenis.scrollTo(t);else t.scrollIntoView({behavior:'smooth'});}}});});
 
   /* ---------- magnifier loupe ---------- */
-  var lensEl=document.querySelector('.lens'),lensInner=document.querySelector('.lens-inner'),L=132,ZOOM=1.5;
+  var lensEl=document.querySelector('.lens'),lensInner=document.querySelector('.lens-inner'),L=160,ZOOM=1.6;
   if(!reduce&&canHover){
     function buildLens(){
       var clone=document.querySelector('main').cloneNode(true);
       clone.querySelectorAll('[id]').forEach(function(n){n.removeAttribute('id');});
       clone.querySelectorAll('canvas').forEach(function(n){n.remove();});
       clone.querySelectorAll('.reveal').forEach(function(n){n.classList.add('in');n.style.transition='none';});
+      clone.querySelectorAll('[data-count]').forEach(function(n){
+        var target=n.getAttribute('data-count'),suf=n.querySelector('.suf');
+        if(n.firstChild&&n.firstChild.nodeType===3)n.firstChild.nodeValue=target;
+        else n.textContent=target;
+        if(suf)n.appendChild(suf);
+      });
+      var lensRot=clone.querySelector('.rot');
+      if(lensRot&&rotEl)lensRot.textContent=rotEl.textContent;
       clone.style.width=innerWidth+'px';
       lensInner.innerHTML='';lensInner.appendChild(clone);
     }
     buildLens();
-    setTimeout(buildLens,2700); // re-capture after stats finish counting
+    setTimeout(buildLens,2700);
+    setTimeout(buildLens,5000);
     var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(buildLens,250);});
+    var st;addEventListener('scroll',function(){clearTimeout(st);st=setTimeout(buildLens,800);},{passive:true});
     document.body.classList.add('lens-on');lensEl.classList.add('on');
     addEventListener('mouseleave',function(){lensEl.style.opacity='0';});
     addEventListener('mouseenter',function(){lensEl.style.opacity='1';});
@@ -383,20 +462,101 @@
     })();
   }
 
-  /* ---------- stack: spotlight reveal ---------- */
-  var stackSec=document.querySelector('.stack'),colsEl=document.getElementById('cols'),ringEl=colsEl&&colsEl.querySelector('.scan-ring');
-  if(colsEl){
-    if(reduce||!canHover){colsEl.classList.add('pinned');}
-    else{
-      stackSec.addEventListener('mousemove',function(e){
-        var r=colsEl.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
-        if(ringEl)ringEl.style.transform='translate('+x+'px,'+y+'px) translate(-50%,-50%)';
+  /* ---------- click to reveal secret + unlock ---------- */
+  if(!reduce&&canHover){
+    var REVEAL_DIST=100;
+    var unlockCount=0;
+    var overlayEl=document.getElementById('unlockOverlay');
+    var overlayIcon=overlayEl.querySelector('.icon');
+    var overlayH3=overlayEl.querySelector('h3');
+    var overlayP=overlayEl.querySelector('p');
+    var overlaySub=overlayEl.querySelector('.sub');
+    document.addEventListener('click',function(e){
+      var secrets=document.querySelectorAll('body > main .secret');
+      secrets.forEach(function(s){
+        if(s.classList.contains('revealed'))return;
+        var r=s.getBoundingClientRect();
+        var cx=r.left+r.width/2, cy=r.top+r.height/2;
+        var dx=e.clientX-cx, dy=e.clientY-cy;
+        if(Math.sqrt(dx*dx+dy*dy)<REVEAL_DIST){
+          s.classList.add('revealed');
+          setTimeout(function(){s.classList.remove('revealed');},4800);
+          checkUnlock();
+        }
       });
-      stackSec.addEventListener('mouseenter',function(){colsEl.classList.add('scanning');if(lensEl)lensEl.style.display='none';});
-      stackSec.addEventListener('mouseleave',function(){colsEl.classList.remove('scanning');if(lensEl)lensEl.style.display='';});
+    });
+    function checkUnlock(){
+      var numbered=document.querySelectorAll('body > main .secret.numbered');
+      var allRevealed=true;
+      numbered.forEach(function(s){if(!s.classList.contains('revealed'))allRevealed=false;});
+      if(!allRevealed)return;
+      unlockCount++;
+      if(unlockCount===1){
+        overlayIcon.textContent='🏆';
+        overlayH3.textContent='// secret unlocked';
+        overlayP.innerHTML='You found all 4. <em>Quite honestly, this entire section was vibe coded from a wild idea at 2am.</em>';
+        overlaySub.textContent="fun fact: the magnifier clones the entire DOM every frame \xB7 don't tell the perf team";
+      }else{
+        var MSGS=[
+          {icon:'👁️',h:'// known fact',p:"A secret is only a secret <em>the first time.</em> Now it's just a known fact.",s:'but hey — you clearly like finding things \xB7 respect'},
+          {icon:'🔁',h:'// deja vu',p:"You've <em>been here before.</em> The thrill fades, but the curiosity doesn't.",s:'once a scanner, always a scanner'},
+          {icon:'🧠',h:'// muscle memory',p:"Your cursor <em>remembered the path.</em> That's pattern recognition, not luck.",s:'or maybe you just really like clicking things'},
+          {icon:'👻',h:'// ghost protocol',p:"These secrets have <em>seen you before.</em> They're starting to wave back.",s:'at this point you might as well maintain this code'},
+          {icon:'☕',h:'// coffee break',p:"You found them all <em>again.</em> Go grab a coffee — you've earned it.",s:"or keep clicking \xB7 I won\x27t judge"}
+        ];
+        var msg=MSGS[Math.floor(Math.random()*MSGS.length)];
+        overlayIcon.textContent=msg.icon;
+        overlayH3.textContent=msg.h;
+        overlayP.innerHTML=msg.p;
+        overlaySub.textContent=msg.s;
+      }
+      setTimeout(function(){overlayEl.classList.add('show');},400);
     }
-    colsEl.addEventListener('click',function(){colsEl.classList.toggle('pinned');});
   }
+
+  /* ---------- stack: scatter reveal ---------- */
+  var colEls=document.querySelectorAll('.col');
+  var REVEAL_R=80;
+  colEls.forEach(function(col){
+    var ring=col.querySelector('.stack-ring');
+    var items=col.querySelectorAll('.tech-item');
+    if(reduce||!canHover){col.classList.add('pinned');return;}
+
+    col.addEventListener('mouseenter',function(){
+      if(col.classList.contains('pinned'))return;
+      col.classList.add('exploring');
+      if(lensEl)lensEl.style.display='none';
+    });
+    col.addEventListener('mouseleave',function(){
+      if(col.classList.contains('pinned'))return;
+      col.classList.remove('exploring');
+      items.forEach(function(it){it.style.opacity='0';});
+      if(lensEl)lensEl.style.display='';
+    });
+    col.addEventListener('mousemove',function(e){
+      if(col.classList.contains('pinned'))return;
+      var r=col.getBoundingClientRect();
+      var mx=e.clientX-r.left, my=e.clientY-r.top;
+      if(ring)ring.style.left=mx+'px';
+      if(ring)ring.style.top=my+'px';
+      items.forEach(function(it){
+        var ir=it.getBoundingClientRect();
+        var ix=ir.left+ir.width/2-r.left, iy=ir.top+ir.height/2-r.top;
+        var dist=Math.sqrt((mx-ix)*(mx-ix)+(my-iy)*(my-iy));
+        it.style.opacity=dist<REVEAL_R?'1':'0';
+      });
+    });
+    col.addEventListener('click',function(){
+      col.classList.remove('exploring');
+      col.classList.toggle('pinned');
+      if(col.classList.contains('pinned')){
+        items.forEach(function(it){it.style.opacity='1';});
+      }else{
+        items.forEach(function(it){it.style.opacity='0';});
+      }
+      if(lensEl)lensEl.style.display='';
+    });
+  });
 
   /* ---------- interactive background ---------- */
   if(!reduce){
@@ -433,8 +593,9 @@
       requestAnimationFrame(draw);
     }
     draw();
-  }
+  } 
 })();
 </script>
+
 </body>
 </html>
