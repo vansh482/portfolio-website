@@ -120,9 +120,11 @@
   .proj:hover .ttl{transform:translateX(14px);background:linear-gradient(100deg,var(--cyan),var(--indigo));-webkit-background-clip:text;background-clip:text;color:transparent}
   .proj:hover .ttl .arrow{opacity:1;transform:translateX(0)}
   .proj:hover .desc{max-height:220px;opacity:1;margin-top:14px}
-  @media (max-width:680px){.proj{grid-template-columns:48px 1fr}.proj .yr{grid-column:2/3;grid-row:1;justify-self:end}.proj .desc{max-height:none;opacity:1;margin-top:12px}.proj .ttl .arrow{opacity:1}}
+  @media (max-width:680px){.proj{display:flex;flex-direction:column;gap:8px;padding:24px 8px}.proj .code{order:-2}.proj .yr{order:-1;align-self:flex-start}.proj .ttl{font-size:clamp(22px,6vw,32px)}.proj .ttl .arrow{opacity:1}.proj .desc{max-height:none;opacity:1;margin-top:8px;max-width:100%}}
 
   .stack .scan-hint{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.04em;margin-top:20px}
+  .hint-mobile{display:none}
+  @media (hover:none){.hint-desktop{display:none}.hint-mobile{display:inline}}
   .stack .cols{margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
   .col{background:var(--panel);padding:24px 20px;min-height:260px;position:relative;overflow:hidden;transition:background .4s var(--ease)}
   .col-title{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--cyan);text-transform:uppercase;
@@ -242,7 +244,7 @@
     <p class="sub">I build systems that stay up when things break — resilient services, low-latency infrastructure, and event-driven replication.</p>
     <div class="rotline" aria-hidden="true">/ <span class="rot" id="rot">currently @ Smartsheet</span></div>
     <div class="meta">
-      <div><b>SMARTSHEET</b> / SDE</div><div>EX &#8212; FUTURES FIRST</div><div>CODEFORCES / EXPERT</div><div>BASED IN CHENNAI, IN</div>
+      <div><b>SMARTSHEET</b> / SDE</div><div>EX &#8212; FUTURES FIRST</div><div>CODEFORCES / EXPERT</div><div>BASED IN BANGALORE, IN</div>
     </div>
     <div class="scrollcue"><span class="bar"></span> SCROLL</div>
     <div class="secret numbered" data-num="1" style="top:20%;left:62%"><span class="snum">1</span> // first principles > frameworks</div>
@@ -299,7 +301,7 @@
   <section class="sec stack" id="stack">
     <div class="wrap">
       <div class="eyebrow reveal"><b>00.3</b> / stack <span class="ln"></span></div>
-      <div class="scan-hint reveal d1">// hover to scan &#183; click to pin</div>
+      <div class="scan-hint reveal d1"><span class="hint-desktop">// hover to scan &#183; click to pin</span><span class="hint-mobile">// tap to reveal &#183; tap again to hide</span></div>
       <div class="cols reveal d1" id="cols">
         <div class="col" data-col="languages">
           <span class="col-title">Languages</span>
@@ -418,7 +420,7 @@
   tick();setInterval(tick,1000);
 
   /* ambient: rotating hero line */
-  var ROT=['currently @ Smartsheet','Codeforces Expert / 1600+','ex-Futures First / C++','low-latency, fault-tolerant','based in Chennai, IN','Kafka / RocksDB / replication'];
+  var ROT=['currently @ Smartsheet','Codeforces Expert / 1600+','ex-Futures First / C++','low-latency, fault-tolerant','based in Bangalore, IN','Kafka / RocksDB / replication'];
   var rotEl=document.getElementById('rot'),ridx=0;
   if(rotEl)setInterval(function(){ridx=(ridx+1)%ROT.length;rotEl.style.opacity='0';setTimeout(function(){rotEl.textContent=ROT[ridx];rotEl.style.opacity='1';var lr=lensInner&&lensInner.querySelector('.rot');if(lr)lr.textContent=ROT[ridx];},350);},2700);
 
@@ -523,13 +525,56 @@
     }
   }
 
+  /* ---------- mobile: long-press to reveal ---------- */
+  if(!reduce&&!canHover){
+    var touchTimer=null,touchX=0,touchY=0;
+    var mLens=document.createElement('div');
+    mLens.style.cssText='position:fixed;width:120px;height:120px;border-radius:50%;border:2px solid var(--cyan);background:rgba(52,231,231,.06);pointer-events:none;z-index:9998;display:none;transform:translate(-50%,-50%);box-shadow:0 0 20px rgba(52,231,231,.2),inset 0 0 20px rgba(52,231,231,.05);transition:opacity .3s';
+    document.body.appendChild(mLens);
+    document.addEventListener('touchstart',function(e){
+      var t=e.touches[0];touchX=t.clientX;touchY=t.clientY;
+      touchTimer=setTimeout(function(){
+        mLens.style.left=touchX+'px';mLens.style.top=touchY+'px';mLens.style.display='block';
+        var secrets=document.querySelectorAll('body > main .secret');
+        secrets.forEach(function(s){
+          if(s.classList.contains('revealed'))return;
+          var r=s.getBoundingClientRect();
+          var cx=r.left+r.width/2,cy=r.top+r.height/2;
+          var dx=touchX-cx,dy=touchY-cy;
+          if(Math.sqrt(dx*dx+dy*dy)<120){
+            s.classList.add('revealed');
+            setTimeout(function(){s.classList.remove('revealed');},4800);
+          }
+        });
+        setTimeout(function(){mLens.style.display='none';},800);
+      },500);
+    },{passive:true});
+    document.addEventListener('touchend',function(){clearTimeout(touchTimer);},{passive:true});
+    document.addEventListener('touchmove',function(e){
+      var t=e.touches[0];
+      if(Math.abs(t.clientX-touchX)>15||Math.abs(t.clientY-touchY)>15)clearTimeout(touchTimer);
+    },{passive:true});
+  }
+
   /* ---------- stack: scatter reveal ---------- */
   var colEls=document.querySelectorAll('.col');
   var REVEAL_R=80;
   colEls.forEach(function(col){
     var ring=col.querySelector('.stack-ring');
     var items=col.querySelectorAll('.tech-item');
-    if(reduce||!canHover){col.classList.add('pinned');return;}
+    if(reduce){col.classList.add('pinned');return;}
+    if(!canHover){
+      col.addEventListener('click',function(){
+        col.classList.toggle('pinned');
+        if(col.classList.contains('pinned')){
+          col.classList.remove('exploring');
+          items.forEach(function(it){it.style.opacity='1';});
+        }else{
+          items.forEach(function(it){it.style.opacity='0';});
+        }
+      });
+      return;
+    }
 
     col.addEventListener('mouseenter',function(){
       if(col.classList.contains('pinned'))return;
