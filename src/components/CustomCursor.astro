@@ -1,0 +1,130 @@
+---
+---
+
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!canHover || reducedMotion) {
+      dot.style.display = 'none';
+      ring.style.display = 'none';
+      return;
+    }
+
+    document.body.classList.add('custom-cursor');
+
+    let mouseX = 0, mouseY = 0;
+    let ringX = 0, ringY = 0;
+    let dotScale = 1;
+    let ringScale = 1;
+    let isHovering = false;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    document.addEventListener('mousedown', () => {
+      dotScale = 0.6;
+      ringScale = 0.8;
+    });
+
+    document.addEventListener('mouseup', () => {
+      dotScale = isHovering ? 0.4 : 1;
+      ringScale = isHovering ? 1.8 : 1;
+    });
+
+    function updateHoverState() {
+      const el = document.elementFromPoint(mouseX, mouseY);
+      const clickable = el && (
+        el.tagName === 'A' ||
+        el.tagName === 'BUTTON' ||
+        el.closest('a') ||
+        el.closest('button') ||
+        (el as HTMLElement).style?.cursor === 'pointer' ||
+        getComputedStyle(el).cursor === 'pointer'
+      );
+
+      if (clickable && !isHovering) {
+        isHovering = true;
+        dotScale = 0.4;
+        ringScale = 1.8;
+        ring.style.borderColor = 'rgba(52, 231, 231, 0.6)';
+        ring.style.backgroundColor = 'rgba(52, 231, 231, 0.05)';
+      } else if (!clickable && isHovering) {
+        isHovering = false;
+        dotScale = 1;
+        ringScale = 1;
+        ring.style.borderColor = 'rgba(230, 237, 248, 0.4)';
+        ring.style.backgroundColor = 'transparent';
+      }
+    }
+
+    function animate() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+
+      dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%) scale(${dotScale})`;
+      ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%) scale(${ringScale})`;
+
+      updateHoverState();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    document.addEventListener('mouseleave', () => {
+      dot.style.opacity = '0';
+      ring.style.opacity = '0';
+    });
+
+    document.addEventListener('mouseenter', () => {
+      dot.style.opacity = '1';
+      ring.style.opacity = '1';
+    });
+  });
+</script>
+
+<style is:global>
+  body.custom-cursor,
+  body.custom-cursor * {
+    cursor: none !important;
+  }
+</style>
+
+<style>
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transition: opacity 0.3s, transform 0.1s ease-out;
+    mix-blend-mode: difference;
+    box-shadow: 0 0 10px rgba(52, 231, 231, 0.5);
+  }
+
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(230, 237, 248, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transition: opacity 0.3s, border-color 0.3s, background-color 0.3s, width 0.3s, height 0.3s;
+  }
+</style>

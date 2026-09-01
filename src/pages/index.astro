@@ -1,0 +1,338 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import HeroScene from '../components/three/HeroScene';
+import { getProjects, getChangelog, getStats, timeAgo } from '../lib/transform';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const projects = await getProjects();
+const featured = projects.filter(p => p.featured).slice(0, 3);
+const changelog = await getChangelog();
+const recentChangelog = changelog.slice(0, 5);
+const stats = await getStats();
+---
+
+<Base title="Vansh Gupta — Backend & Distributed-Systems Engineer">
+  <section class="hero">
+    <HeroScene client:visible />
+    <div class="wrap" style="position:relative;z-index:1;">
+      <div class="hero-tag">Backend & Distributed-Systems Engineer</div>
+      <h1 class="hero-headline">
+        I build systems that<br />
+        <em>stay up when things break.</em>
+      </h1>
+      <p class="hero-sub">
+        Resilient services, low-latency infrastructure, and event-driven replication.
+        Currently shipping at Smartsheet.
+      </p>
+      <div class="hero-ctas">
+        <a class="cta cta-primary" href={`${base}/projects`}>View Projects &rarr;</a>
+        <a class="cta cta-secondary" href={`${base}/changelog`}>Changelog &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>DISTRIBUTED SYSTEMS<b>/</b>LOW-LATENCY<b>/</b>FAULT TOLERANCE<b>/</b>EVENT-DRIVEN<b>/</b>REPLICATION<b>/</b></span>
+      <span>DISTRIBUTED SYSTEMS<b>/</b>LOW-LATENCY<b>/</b>FAULT TOLERANCE<b>/</b>EVENT-DRIVEN<b>/</b>REPLICATION<b>/</b></span>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">Featured Projects</div>
+      <div class="projects-preview">
+        {featured.map(p => (
+          <div class="preview-item">
+            <ProjectCard project={p} />
+          </div>
+        ))}
+      </div>
+      <a class="see-all" href={`${base}/projects`}>All projects &rarr;</a>
+    </div>
+  </section>
+
+  {recentChangelog.length > 0 && (
+    <section class="section" style="padding-top:0;padding-bottom:clamp(40px,6vw,80px);">
+      <div class="wrap">
+        <div class="eyebrow">Latest Activity</div>
+        <div class="changelog-preview">
+          {recentChangelog.map(entry => (
+            <div class="cl-entry">
+              <span class="cl-time">{new Date(entry.timestamp).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}</span>
+              <span class:list={['cl-badge', `cl-badge--${entry.type}`]}>{entry.type}</span>
+              <span class="cl-repo">{entry.repo}</span>
+              {entry.commits && entry.commits.length > 0 && (
+                <span class="cl-msg">{entry.commits[0].message}</span>
+              )}
+              {!entry.commits && <span class="cl-msg">{entry.message}</span>}
+            </div>
+          ))}
+        </div>
+        <a class="see-all" href={`${base}/changelog`}>Full changelog &rarr;</a>
+      </div>
+    </section>
+  )}
+
+  <section class="section stats-section">
+    <div class="wrap">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-val gradient-text">1600+</div>
+          <div class="stat-label">Codeforces Rating &middot; Expert</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val gradient-text">#850</div>
+          <div class="stat-label">Global Rank &middot; Round 896</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val gradient-text">5M+</div>
+          <div class="stat-label">Records Load-Tested</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val gradient-text">2</div>
+          <div class="stat-label">Production Connectors</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    padding: clamp(100px, 15vh, 160px) 0 clamp(60px, 8vh, 100px);
+    position: relative;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: clamp(11px, 1.1vw, 13px);
+    letter-spacing: 0.15em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-headline {
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+
+  .hero-headline em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--cyan), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 1.6vw, 20px);
+    color: #aebcd6;
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cta {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    letter-spacing: 0.03em;
+    transition: all 0.3s var(--ease);
+  }
+
+  .cta-primary {
+    background: var(--cyan);
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .cta-primary:hover {
+    box-shadow: 0 0 24px rgba(52, 231, 231, 0.3);
+  }
+
+  .cta-secondary {
+    border: 1px solid var(--line2);
+    color: var(--dim);
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  /* Marquee */
+  .marquee {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 24s linear infinite;
+  }
+
+  .marquee-track span {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: clamp(18px, 2.4vw, 28px);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    padding: 0 16px;
+    color: #dbe6f7;
+  }
+
+  .marquee-track b {
+    color: var(--cyan);
+    margin: 0 20px;
+    font-weight: 700;
+  }
+
+  /* Featured Projects */
+  .projects-preview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  /* Changelog Preview */
+  .changelog-preview {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .cl-entry {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+
+  .cl-entry:last-child { border-bottom: none; }
+
+  .cl-time {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--dimmer);
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+
+  .cl-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .cl-badge--push { background: rgba(91,141,239,0.15); color: var(--blue); }
+  .cl-badge--create { background: rgba(70,224,139,0.15); color: var(--green); }
+  .cl-badge--release { background: rgba(255,180,84,0.15); color: var(--amber); }
+  .cl-badge--other { background: rgba(111,130,166,0.15); color: var(--dim); }
+
+  .cl-repo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--cyan);
+    flex-shrink: 0;
+  }
+
+  .cl-msg {
+    color: #9fb0ce;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .see-all {
+    display: inline-block;
+    margin-top: 24px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--cyan);
+    letter-spacing: 0.04em;
+    transition: opacity 0.3s;
+  }
+
+  .see-all:hover {
+    opacity: 0.7;
+  }
+
+  /* Stats */
+  .stats-section {
+    padding-top: 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .stat {
+    background: var(--panel);
+    padding: 28px 24px;
+  }
+
+  .stat-val {
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .projects-preview {
+      grid-template-columns: 1fr;
+    }
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

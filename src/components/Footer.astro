@@ -1,0 +1,154 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-heading">Navigate</div>
+        <a href={`${base}/`}>Home</a>
+        <a href={`${base}/projects`}>Projects</a>
+        <a href={`${base}/changelog`}>Changelog</a>
+        <a href={`${base}/about`}>About</a>
+        <a href={`${base}/contact`}>Contact</a>
+      </div>
+      <div>
+        <div class="footer-heading">Elsewhere</div>
+        <a href="https://github.com/vansh482" target="_blank" rel="noopener">GitHub &nearr;</a>
+        <a href="https://www.linkedin.com/in/vansh-vg/" target="_blank" rel="noopener">LinkedIn &nearr;</a>
+        <a href="mailto:vansh012345gupta@gmail.com">Email &nearr;</a>
+      </div>
+      <div>
+        <div class="footer-heading">Status</div>
+        <div class="footer-status"><span class="footer-dot"></span> Open to hard problems</div>
+        <div class="footer-muted">&copy; {year} Vansh Gupta</div>
+      </div>
+      <div>
+        <div class="footer-heading">Local Time</div>
+        <div class="footer-clock" id="footer-clock">--:--:--</div>
+        <div class="footer-muted">Bangalore, IN</div>
+      </div>
+    </div>
+    <div class="footer-note">
+      B.Tech CSE, The LNMIIT &middot; JEE Advanced AIR 9684 (2020)
+    </div>
+  </div>
+</footer>
+
+<script>
+  function updateClock() {
+    const el = document.getElementById('footer-clock');
+    if (!el) return;
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    el.textContent = `${h}:${m}:${s}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 48px 0 40px;
+    margin-top: clamp(60px, 8vw, 120px);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .footer-heading {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .footer a {
+    display: block;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #cfd8ea;
+    padding: 4px 0;
+    width: fit-content;
+    position: relative;
+  }
+
+  .footer a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    width: 0;
+    height: 1px;
+    background: var(--cyan);
+    transition: width 0.3s var(--ease);
+  }
+
+  .footer a:hover::after {
+    width: 100%;
+  }
+
+  .footer-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green);
+  }
+
+  .footer-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px rgba(70, 224, 139, 0.4);
+  }
+
+  .footer-muted {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dimmer);
+    margin-top: 8px;
+  }
+
+  .footer-clock {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .footer-note {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dimmer);
+    letter-spacing: 0.05em;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

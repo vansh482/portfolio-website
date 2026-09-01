@@ -1,0 +1,274 @@
+---
+import Base from '../layouts/Base.astro';
+import { getChangelog } from '../lib/transform';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const entries = await getChangelog();
+
+// Group entries by date (YYYY-MM-DD)
+const grouped = new Map<string, typeof entries>();
+for (const entry of entries) {
+  const date = new Date(entry.timestamp);
+  const key = date.toLocaleDateString('en-IN', { year: 'numeric', month: 'long' });
+  if (!grouped.has(key)) grouped.set(key, []);
+  grouped.get(key)!.push(entry);
+}
+---
+
+<Base title="Changelog — Vansh Gupta">
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">What I've been shipping</div>
+      <h1 class="page-title">Changelog</h1>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="push">Push</button>
+        <button class="filter-btn" data-filter="create">Create</button>
+        <button class="filter-btn" data-filter="release">Release</button>
+      </div>
+
+      {entries.length === 0 && (
+        <div class="empty">No activity yet. Push some code!</div>
+      )}
+
+      <div class="log" id="changelog-log">
+        {[...grouped.entries()].map(([month, items]) => (
+          <div class="month-group" data-month={month}>
+            <div class="month-label">{month}</div>
+            {items.map((entry) => {
+              const d = new Date(entry.timestamp);
+              const time = d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })
+                + ', ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })
+                + ' IST';
+              return (
+                <div class="log-entry" data-type={entry.type}>
+                  <div class="log-meta">
+                    <span class="log-time">{time}</span>
+                    <span class={`log-badge ${entry.type}`}>{entry.type}</span>
+                    <a class="log-repo" href={entry.repoUrl} target="_blank" rel="noopener">
+                      {entry.repo}
+                    </a>
+                  </div>
+                  {entry.commits && entry.commits.length > 0 ? (
+                    <div class="log-commits">
+                      {entry.commits.map((c) => (
+                        <div class="log-commit">
+                          <span class="sha">{c.sha}</span>
+                          <span class="msg">{c.message}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div class="log-commits">
+                      <div class="log-commit">
+                        <span class="msg">{entry.message}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+    const entries = document.querySelectorAll<HTMLElement>('.log-entry');
+    const groups = document.querySelectorAll<HTMLElement>('.month-group');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        buttons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        entries.forEach((entry) => {
+          if (filter === 'all' || entry.dataset.type === filter) {
+            entry.classList.remove('hidden');
+          } else {
+            entry.classList.add('hidden');
+          }
+        });
+
+        // Hide month groups with all hidden entries
+        groups.forEach((group) => {
+          const visible = group.querySelectorAll('.log-entry:not(.hidden)');
+          group.classList.toggle('hidden', visible.length === 0);
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .page-title {
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--line2);
+    background: transparent;
+    color: var(--dim);
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    transition: all 0.2s var(--ease);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: rgba(52, 231, 231, 0.1);
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+
+  .empty {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--dim);
+    padding: 40px 0;
+  }
+
+  .month-group {
+    margin-bottom: 40px;
+  }
+
+  .month-group.hidden {
+    display: none;
+  }
+
+  .month-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+  }
+
+  .log-entry {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .log-entry.hidden {
+    display: none;
+  }
+
+  .log-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .log-time {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--dimmer);
+    min-width: 140px;
+  }
+
+  .log-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .log-badge.push {
+    background: rgba(91, 141, 239, 0.15);
+    color: var(--blue);
+  }
+
+  .log-badge.create {
+    background: rgba(70, 224, 139, 0.15);
+    color: var(--green);
+  }
+
+  .log-badge.release {
+    background: rgba(255, 180, 84, 0.15);
+    color: var(--amber);
+  }
+
+  .log-badge.other {
+    background: rgba(111, 130, 166, 0.15);
+    color: var(--dim);
+  }
+
+  .log-repo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .log-repo:hover {
+    color: var(--cyan);
+  }
+
+  .log-commits {
+    padding-left: 152px;
+  }
+
+  .log-commit {
+    font-size: 14px;
+    color: #9fb0ce;
+    padding: 3px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .sha {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dimmer);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .log-commits {
+      padding-left: 0;
+      margin-top: 8px;
+    }
+
+    .log-time {
+      min-width: auto;
+    }
+
+    .log-meta {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  }
+</style>

@@ -1,0 +1,302 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getProjects } from '../../lib/transform';
+import type { Project } from '../../lib/types';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map(p => ({
+    params: { slug: p.slug },
+    props: { project: p },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const allProjects = await getProjects();
+const idx = allProjects.findIndex(p => p.slug === project.slug);
+const prev = idx > 0 ? allProjects[idx - 1] : null;
+const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
+
+const langEntries = Object.entries(project.languages).sort(([, a], [, b]) => b - a);
+const totalBytes = langEntries.reduce((sum, [, bytes]) => sum + bytes, 0);
+---
+
+<Base title={`${project.displayName} — Vansh Gupta`} description={project.description}>
+  <section class="project-hero">
+    <div class="wrap">
+      <a class="breadcrumb" href={`${base}/projects`}>&larr; Projects</a>
+      <div class="hero-tag">
+        {project.org ? `${project.org} · ` : ''}{project.year}
+      </div>
+      <h1 class="hero-title">{project.displayName}</h1>
+      <p class="hero-desc">{project.description}</p>
+      <div class="hero-links">
+        <a class="link-btn" href={project.url} target="_blank" rel="noopener">
+          GitHub &nearr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      {langEntries.length > 0 && (
+        <div class="tech-pills">
+          {langEntries.map(([lang, bytes]) => (
+            <span class="pill">
+              {lang}
+              <span class="pill-pct">{Math.round((bytes / totalBytes) * 100)}%</span>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {project.metrics && project.metrics.length > 0 && (
+        <div class="metrics-row">
+          {project.metrics.map(m => (
+            <div class="metric">
+              <div class="metric-val">{m.value}</div>
+              <div class="metric-lbl">{m.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {project.longDescription && (
+        <div class="prose">
+          <h2>What I Built</h2>
+          <p>{project.longDescription}</p>
+        </div>
+      )}
+
+      {project.topics.length > 0 && (
+        <div class="topics">
+          <h3 class="topics-title">Topics</h3>
+          <div class="topics-list">
+            {project.topics.map(t => <span class="topic">{t}</span>)}
+          </div>
+        </div>
+      )}
+
+      <div class="project-nav">
+        {prev ? (
+          <a class="pnav prev" href={`${base}/projects/${prev.slug}`}>
+            <span class="pnav-dir">&larr; Previous</span>
+            <span class="pnav-name">{prev.displayName}</span>
+          </a>
+        ) : <div />}
+        {next ? (
+          <a class="pnav next" href={`${base}/projects/${next.slug}`}>
+            <span class="pnav-dir">Next &rarr;</span>
+            <span class="pnav-name">{next.displayName}</span>
+          </a>
+        ) : <div />}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .project-hero {
+    padding: clamp(60px, 8vw, 100px) 0 clamp(30px, 4vw, 50px);
+  }
+
+  .breadcrumb {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 0.04em;
+    display: inline-block;
+    margin-bottom: 24px;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb:hover { color: var(--cyan); }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .hero-desc {
+    font-size: clamp(16px, 1.5vw, 19px);
+    color: #aebcd6;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .hero-links { display: flex; gap: 12px; }
+
+  .link-btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 16px;
+    border: 1px solid var(--line2);
+    border-radius: 8px;
+    color: var(--dim);
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+  }
+
+  .link-btn:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 6px 14px;
+    border: 1px solid var(--line2);
+    border-radius: 20px;
+    color: #9fb0ce;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pill-pct {
+    font-size: 10px;
+    color: var(--dimmer);
+  }
+
+  .metrics-row {
+    display: flex;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .metric {
+    background: var(--panel);
+    padding: 24px 28px;
+    flex: 1;
+  }
+
+  .metric-val {
+    font-weight: 700;
+    font-size: clamp(24px, 3vw, 36px);
+    background: linear-gradient(100deg, var(--cyan), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+  }
+
+  .metric-lbl {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .prose {
+    margin-bottom: 40px;
+    max-width: 700px;
+  }
+
+  .prose h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .prose p {
+    font-size: 16px;
+    color: #aebcd6;
+    line-height: 1.7;
+  }
+
+  .topics { margin-bottom: 40px; }
+
+  .topics-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .topic {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--line2);
+    border-radius: 20px;
+    color: var(--blue);
+  }
+
+  .project-nav {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 40px;
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+  }
+
+  .pnav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: color 0.2s;
+  }
+
+  .pnav:hover { color: var(--cyan); }
+
+  .pnav.next { text-align: right; }
+
+  .pnav-dir {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+  }
+
+  .pnav-name {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    .metrics-row { flex-direction: column; }
+  }
+</style>

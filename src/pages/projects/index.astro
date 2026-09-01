@@ -1,0 +1,127 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../lib/transform';
+
+const projects = await getProjects();
+const featured = projects.filter(p => p.featured);
+const rest = projects.filter(p => !p.featured);
+---
+
+<Base title="Projects — Vansh Gupta" description="Things I've shipped.">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="eyebrow">Projects</div>
+      <h1 class="section-title">Things I've <em>shipped.</em></h1>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="work">Work</button>
+        <button class="filter-btn" data-filter="personal">Personal</button>
+        <button class="filter-btn" data-filter="experiment">Experiment</button>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+        {featured.map(p => (
+          <div class="project-item" data-category={p.category}>
+            <ProjectCard project={p} />
+          </div>
+        ))}
+        {rest.map(p => (
+          <div class="project-item" data-category={p.category}>
+            <ProjectCard project={p} />
+          </div>
+        ))}
+      </div>
+
+      {projects.length === 0 && (
+        <div class="empty">
+          <p>No projects found. Push some code to GitHub!</p>
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+    const items = document.querySelectorAll<HTMLElement>('.project-item');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        items.forEach(item => {
+          if (filter === 'all' || item.dataset.category === filter) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .page-hero {
+    padding: clamp(60px, 8vw, 100px) 0 clamp(30px, 4vw, 50px);
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--line2);
+    background: transparent;
+    color: var(--dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: rgba(52, 231, 231, 0.1);
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

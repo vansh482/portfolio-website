@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio v2 — Design References</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #070B12;
+  --panel: #0D1422;
+  --panel2: #111827;
+  --line: #1B2740;
+  --line2: #26344f;
+  --text: #E6EDF8;
+  --dim: #6F82A6;
+  --dimmer: #46587a;
+  --cyan: #34E7E7;
+  --blue: #5B8DEF;
+  --indigo: #9B8CFF;
+  --amber: #FFB454;
+  --green: #46E08B;
+  --red: #EF4444;
+  --disp: 'Space Grotesk', system-ui, sans-serif;
+  --mono: 'Space Mono', ui-monospace, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--ink); color: var(--text); font-family: var(--disp); line-height: 1.6; }
+::selection { background: var(--cyan); color: var(--ink); }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+
+header { text-align: center; margin-bottom: 80px; }
+header h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.02em;
+  background: linear-gradient(100deg, var(--cyan), var(--blue), var(--indigo));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+header p { font-family: var(--mono); font-size: 13px; color: var(--dim); margin-top: 12px; letter-spacing: 0.08em; }
+
+/* ---- Reference Cards ---- */
+.ref-section { margin-bottom: 80px; }
+.ref-section h2 { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; color: var(--cyan);
+  text-transform: uppercase; margin-bottom: 8px; }
+.ref-section h3 { font-size: 28px; font-weight: 600; margin-bottom: 6px; }
+.ref-section .url { font-family: var(--mono); font-size: 12px; color: var(--dim); margin-bottom: 20px; }
+.ref-section .url a { color: var(--blue); text-decoration: none; }
+.ref-section .url a:hover { text-decoration: underline; }
+
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.ref-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+.ref-card h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+  color: var(--dimmer); text-transform: uppercase; margin-bottom: 12px; }
+.ref-card p { font-size: 15px; color: #aebcd6; }
+.ref-card .takeaway { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 12px; color: var(--amber); }
+
+/* ---- Live Mockups ---- */
+.mockup-section { margin-bottom: 80px; }
+.mockup-section h2 { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em;
+  color: var(--cyan); text-transform: uppercase; margin-bottom: 8px; }
+.mockup-section h3 { font-size: 28px; font-weight: 600; margin-bottom: 24px; }
+
+/* ---- Status Bar Mockup ---- */
+.status-bar-demo { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 20px; display: flex; align-items: center; gap: 16px;
+  font-family: var(--mono); font-size: 12px; color: var(--dim); margin-bottom: 40px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 8px rgba(70, 224, 139, 0.5); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.status-bar-demo .label { color: var(--text); font-weight: 700; }
+.status-bar-demo .sep { color: var(--line2); }
+.status-bar-demo .repo { color: var(--cyan); }
+.status-bar-demo .stat { color: var(--amber); }
+
+/* ---- Changelog Mockup ---- */
+.changelog-demo { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  overflow: hidden; margin-bottom: 40px; }
+.changelog-header { padding: 20px 24px; border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center; }
+.changelog-header h4 { font-size: 16px; font-weight: 600; }
+.changelog-filters { display: flex; gap: 8px; }
+.changelog-filters button { font-family: var(--mono); font-size: 11px; padding: 5px 12px;
+  border-radius: 20px; border: 1px solid var(--line2); background: transparent; color: var(--dim);
+  cursor: pointer; letter-spacing: 0.03em; }
+.changelog-filters button.active { background: rgba(52,231,231,0.1); border-color: var(--cyan); color: var(--cyan); }
+
+.log-entry { padding: 20px 24px; border-bottom: 1px solid var(--line); }
+.log-entry:last-child { border-bottom: none; }
+.log-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.log-time { font-family: var(--mono); font-size: 12px; color: var(--dimmer); min-width: 140px; }
+.log-badge { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+.log-badge.push { background: rgba(91,141,239,0.15); color: var(--blue); }
+.log-badge.create { background: rgba(70,224,139,0.15); color: var(--green); }
+.log-badge.release { background: rgba(255,180,84,0.15); color: var(--amber); }
+.log-repo { font-family: var(--mono); font-size: 13px; color: var(--text); font-weight: 500; }
+.log-commits { margin-top: 8px; padding-left: 152px; }
+.log-commit { font-size: 14px; color: #9fb0ce; padding: 3px 0; display: flex; align-items: baseline; gap: 8px; }
+.log-commit .sha { font-family: var(--mono); font-size: 11px; color: var(--dimmer); }
+.log-commit .msg { }
+.log-diff { font-family: var(--mono); font-size: 11px; color: var(--dimmer); margin-top: 8px;
+  padding-left: 152px; display: flex; gap: 12px; }
+.log-diff .add { color: var(--green); }
+.log-diff .del { color: var(--red); }
+.log-diff .lang { color: var(--dim); }
+
+/* ---- Project Card Mockup ---- */
+.project-cards-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+.project-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 28px; position: relative; overflow: hidden; cursor: pointer;
+  transition: border-color 0.3s, transform 0.3s; }
+.project-card:hover { border-color: var(--line2); transform: translateY(-2px); }
+.project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue)); opacity: 0;
+  transition: opacity 0.3s; }
+.project-card:hover::before { opacity: 1; }
+.project-card .org { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  color: var(--dimmer); text-transform: uppercase; margin-bottom: 10px; }
+.project-card .name { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+.project-card .desc { font-size: 14px; color: #9fb0ce; margin-bottom: 16px; line-height: 1.5; }
+.project-card .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.project-card .stack span { font-family: var(--mono); font-size: 11px; padding: 4px 10px;
+  border: 1px solid var(--line2); border-radius: 20px; color: #9fb0ce; }
+.project-card .metrics { display: flex; gap: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.project-card .metric { }
+.project-card .metric .val { font-weight: 700; font-size: 18px;
+  background: linear-gradient(100deg, var(--cyan), var(--blue));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.project-card .metric .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  color: var(--dimmer); text-transform: uppercase; margin-top: 2px; }
+.project-card .arrow { position: absolute; top: 28px; right: 28px; font-size: 18px; color: var(--dimmer);
+  transition: color 0.3s, transform 0.3s; }
+.project-card:hover .arrow { color: var(--cyan); transform: translate(3px, -3px); }
+
+/* ---- Nav Mockup ---- */
+.nav-demo { background: rgba(13,20,34,0.85); backdrop-filter: blur(12px); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px 24px; display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 40px; }
+.nav-demo .brand { font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+.nav-demo .links { display: flex; gap: 28px; }
+.nav-demo .links a { font-family: var(--mono); font-size: 12px; color: var(--dim); text-decoration: none;
+  letter-spacing: 0.04em; position: relative; padding-bottom: 2px; }
+.nav-demo .links a:hover { color: var(--text); }
+.nav-demo .links a.active { color: var(--text); }
+.nav-demo .links a.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+  height: 1px; background: var(--cyan); }
+.nav-demo .status { display: flex; align-items: center; gap: 8px; font-family: var(--mono);
+  font-size: 11px; color: var(--dim); }
+
+/* ---- Hero Mockup ---- */
+.hero-demo { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 80px 60px; text-align: center; margin-bottom: 40px; position: relative; overflow: hidden; }
+.hero-demo::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(52,231,231,0.06), transparent 60%); }
+.hero-demo .tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; color: var(--dim);
+  text-transform: uppercase; margin-bottom: 20px; position: relative; }
+.hero-demo .headline { font-size: 56px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05;
+  position: relative; margin-bottom: 20px; }
+.hero-demo .headline em { font-style: normal;
+  background: linear-gradient(100deg, var(--cyan), var(--blue));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-demo .sub { font-size: 18px; color: #aebcd6; max-width: 540px; margin: 0 auto 30px;
+  position: relative; line-height: 1.6; }
+.hero-demo .ctas { display: flex; gap: 12px; justify-content: center; position: relative; }
+.hero-demo .cta { font-family: var(--mono); font-size: 13px; padding: 12px 24px; border-radius: 8px;
+  text-decoration: none; letter-spacing: 0.03em; transition: all 0.3s; }
+.hero-demo .cta.primary { background: var(--cyan); color: var(--ink); font-weight: 700; }
+.hero-demo .cta.primary:hover { box-shadow: 0 0 20px rgba(52,231,231,0.3); }
+.hero-demo .cta.secondary { border: 1px solid var(--line2); color: var(--dim); }
+.hero-demo .cta.secondary:hover { border-color: var(--text); color: var(--text); }
+
+/* ---- Comparison Table ---- */
+.compare { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+.compare th, .compare td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--line); }
+.compare th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--dimmer);
+  text-transform: uppercase; }
+.compare td { font-size: 14px; color: #aebcd6; }
+.compare td:first-child { font-weight: 600; color: var(--text); }
+.compare .check { color: var(--green); }
+.compare .x { color: var(--dimmer); }
+.compare .ours { background: rgba(52,231,231,0.03); }
+
+/* ---- Footer ---- */
+.footer-note { text-align: center; font-family: var(--mono); font-size: 11px; color: var(--dimmer);
+  padding: 40px 0; border-top: 1px solid var(--line); margin-top: 40px; letter-spacing: 0.05em; }
+
+@media (max-width: 768px) {
+  .ref-grid, .project-cards-demo { grid-template-columns: 1fr; }
+  .hero-demo .headline { font-size: 36px; }
+  .hero-demo { padding: 50px 24px; }
+  .log-commits, .log-diff { padding-left: 0; }
+  .container { padding: 40px 20px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Portfolio v2 — Design References</h1>
+  <p>REFERENCE SITES + LIVE COMPONENT MOCKUPS</p>
+</header>
+
+<!-- ═══════════════════════ REFERENCE 1 ═══════════════════════ -->
+<section class="ref-section">
+  <h2>Reference 01 — Product-Company Aesthetic</h2>
+  <h3>Resend (resend.com)</h3>
+  <div class="url"><a href="https://resend.com" target="_blank">resend.com ↗</a> — Email API for developers</div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h4>What to borrow</h4>
+      <p>Dark-first aesthetic with a single accent color. Product-style hero: big headline, one-line description, two CTAs. Feature sections presented as clean cards with icons. The entire site feels like a product, not a person — which is exactly what we want.</p>
+      <div class="takeaway">→ We borrow: the product-company structure, dark palette, feature-card pattern</div>
+    </div>
+    <div class="ref-card">
+      <h4>What to change</h4>
+      <p>Resend uses purple/violet as its accent. We keep our cyan/blue gradient — it's already distinctive and maps to the "infrastructure monitoring" visual language. Their layout is more marketing-heavy; ours should be more data-dense (an engineer's site, not a marketing site).</p>
+      <div class="takeaway">→ We change: more data density, engineering-forward content, dual cyan/amber accents</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ REFERENCE 2 ═══════════════════════ -->
+<section class="ref-section">
+  <h2>Reference 02 — Changelog / Release Page</h2>
+  <h3>Linear Changelog (linear.app/changelog)</h3>
+  <div class="url"><a href="https://linear.app/changelog" target="_blank">linear.app/changelog ↗</a> — Product changelog</div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h4>What to borrow</h4>
+      <p>Date-grouped entries with clear hierarchy. Filter tabs (All / Features / Fixes). Each entry has a title, description, and optional media. Clean vertical rhythm with generous whitespace. Treats the changelog as a first-class product page, not an afterthought.</p>
+      <div class="takeaway">→ We borrow: date grouping, filter tabs, changelog-as-product-page status</div>
+    </div>
+    <div class="ref-card">
+      <h4>What to change</h4>
+      <p>Linear's changelog is light-mode and editorial. Ours is dark and technical — styled like a system event log. We show commit SHAs, diff stats (+142 -38), and event-type badges (PUSH, CREATE, RELEASE). It's a changelog for an engineer, not a product announcement.</p>
+      <div class="takeaway">→ We change: event-log format, commit-level detail, monospace timestamps, diff stats</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ REFERENCE 3 ═══════════════════════ -->
+<section class="ref-section">
+  <h2>Reference 03 — Developer Infrastructure Aesthetic</h2>
+  <h3>Railway (railway.com)</h3>
+  <div class="url"><a href="https://railway.com" target="_blank">railway.com ↗</a> — Infrastructure platform</div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h4>What to borrow</h4>
+      <p>Dark theme with colorful accents on a near-black background. Network/topology visualizations as hero elements. The "infrastructure as product" framing — deploys, logs, metrics presented beautifully. Status indicators with colored dots. Technical precision meets visual polish.</p>
+      <div class="takeaway">→ We borrow: topology visuals, status indicators, infrastructure-as-product framing</div>
+    </div>
+    <div class="ref-card">
+      <h4>What to change</h4>
+      <p>Railway is a multi-feature SaaS product. Our site is a personal portfolio — fewer pages, more focused. We don't need pricing or team features. The 3D/topology element should be more abstract and artistic, less literal UI. Our status bar is personal ("shipping · 142 commits this month"), not system uptime.</p>
+      <div class="takeaway">→ We change: personal voice, abstract 3D, fewer pages, human warmth in the data</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ LIVE MOCKUPS ═══════════════════════ -->
+
+<section class="mockup-section">
+  <h2>Live Mockup 01 — Navigation</h2>
+  <h3>Sticky Nav with Status</h3>
+
+  <div class="nav-demo">
+    <span class="brand">VANSH GUPTA®</span>
+    <div class="links">
+      <a href="#" class="active">Projects</a>
+      <a href="#">Changelog</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="status">
+      <span class="status-dot" style="width:6px;height:6px;"></span>
+      open to work
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--dim);">Backdrop blur, monospace links. The green dot + "open to work" replaces a traditional CTA button. Clean, functional, no hamburger on desktop.</p>
+</section>
+
+<section class="mockup-section">
+  <h2>Live Mockup 02 — Status Bar</h2>
+  <h3>The Signature Element</h3>
+
+  <div class="status-bar-demo">
+    <div class="status-dot"></div>
+    <span class="label">shipping</span>
+    <span class="sep">·</span>
+    <span>last push <span class="stat">2h ago</span> to <span class="repo">repo-doc-mcp</span></span>
+    <span class="sep">·</span>
+    <span><span class="stat">142</span> commits this month</span>
+    <span class="sep">·</span>
+    <span><span class="stat">8</span> repos active</span>
+  </div>
+  <p style="font-size:14px;color:var(--dim);">Lives below the nav on every page. Powered by GitHub webhook data. The green pulse + amber stats create a "live dashboard" feel. This is the single element that makes the portfolio unmistakably a systems engineer's site.</p>
+</section>
+
+<section class="mockup-section">
+  <h2>Live Mockup 03 — Hero Section</h2>
+  <h3>Homepage Hero</h3>
+
+  <div class="hero-demo">
+    <div class="tag">Backend & Distributed-Systems Engineer</div>
+    <div class="headline">I build systems that<br><em>stay up when things break.</em></div>
+    <div class="sub">Resilient services, low-latency infrastructure, and event-driven replication. Currently shipping at Smartsheet.</div>
+    <div class="ctas">
+      <a class="cta primary" href="#">View Projects →</a>
+      <a class="cta secondary" href="#">Changelog →</a>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--dim);">Clean product-style hero. The 3D network topology visualization would sit behind this text as an ambient background — similar to your current particle canvas but with 3D depth. Two CTAs direct to the core content.</p>
+</section>
+
+<section class="mockup-section">
+  <h2>Live Mockup 04 — Changelog (Event Log Style)</h2>
+  <h3>The Release Page</h3>
+
+  <div class="changelog-demo">
+    <div class="changelog-header">
+      <h4>Changelog</h4>
+      <div class="changelog-filters">
+        <button class="active">All</button>
+        <button>Push</button>
+        <button>Create</button>
+        <button>Release</button>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-meta">
+        <span class="log-time">Sep 1, 14:32 IST</span>
+        <span class="log-badge push">Push</span>
+        <span class="log-repo">repo-doc-mcp<span style="color:var(--dimmer);font-weight:400">/main</span></span>
+      </div>
+      <div class="log-commits">
+        <div class="log-commit"><span class="sha">a3f7c21</span> <span class="msg">Add webhook handler for branch events</span></div>
+        <div class="log-commit"><span class="sha">b8e2d04</span> <span class="msg">Fix token refresh logic</span></div>
+        <div class="log-commit"><span class="sha">c1a5f89</span> <span class="msg">Update README</span></div>
+      </div>
+      <div class="log-diff">
+        <span class="lang">TypeScript</span>
+        <span class="add">+142</span>
+        <span class="del">-38</span>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-meta">
+        <span class="log-time">Aug 30, 22:15 IST</span>
+        <span class="log-badge create">Create</span>
+        <span class="log-repo">pizza-demo</span>
+      </div>
+      <div class="log-commits">
+        <div class="log-commit"><span class="msg" style="color:#aebcd6;">New repository — 3D pizza builder: Vite/Three.js frontend, TS order-adapters backend</span></div>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-meta">
+        <span class="log-time">Aug 28, 19:41 IST</span>
+        <span class="log-badge push">Push</span>
+        <span class="log-repo">confluence-mcp<span style="color:var(--dimmer);font-weight:400">/main</span></span>
+      </div>
+      <div class="log-commits">
+        <div class="log-commit"><span class="sha">d4e7b22</span> <span class="msg">Add page tree traversal for nested spaces</span></div>
+        <div class="log-commit"><span class="sha">e9f3a16</span> <span class="msg">Handle pagination in Confluence API responses</span></div>
+      </div>
+      <div class="log-diff">
+        <span class="lang">TypeScript</span>
+        <span class="add">+89</span>
+        <span class="del">-12</span>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-meta">
+        <span class="log-time">Aug 25, 11:03 IST</span>
+        <span class="log-badge release">Release</span>
+        <span class="log-repo">repo-doc-mcp</span>
+      </div>
+      <div class="log-commits">
+        <div class="log-commit"><span class="msg" style="color:#aebcd6;">v1.2.0 — Added multi-branch comparison and improved token handling</span></div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--dim);">Event-log format with monospace timestamps, color-coded type badges, commit SHAs, and diff stats. Filter tabs for event types. Date-grouped. This is the changelog of someone who ships — technical, honest, auto-populated from GitHub webhooks.</p>
+</section>
+
+<section class="mockup-section">
+  <h2>Live Mockup 05 — Project Cards</h2>
+  <h3>The Projects Grid</h3>
+
+  <div class="project-cards-demo">
+    <div class="project-card">
+      <span class="arrow">↗</span>
+      <div class="org">Smartsheet · 2025</div>
+      <div class="name">Connectors 3.0</div>
+      <div class="desc">Bi-directional enterprise data sync — Dynamics 365 & ServiceNow connectors built on Nango, load-tested to 5M+ records.</div>
+      <div class="stack">
+        <span>Java</span><span>Spring Boot</span><span>AWS</span><span>MySQL</span><span>Nango</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="val">5M+</div><div class="lbl">Records tested</div></div>
+        <div class="metric"><div class="val">2</div><div class="lbl">Connectors</div></div>
+        <div class="metric"><div class="val">Bi-dir</div><div class="lbl">Sync mode</div></div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="arrow">↗</span>
+      <div class="org">Futures First · 2024</div>
+      <div class="name">Event-Driven Replication</div>
+      <div class="desc">Replaced Aeron middleware on trading servers with a Kafka + RocksDB replication layer — replayable, fault-tolerant, cleaner recovery.</div>
+      <div class="stack">
+        <span>C++</span><span>Kafka</span><span>RocksDB</span><span>gRPC</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="val">&lt;40μs</div><div class="lbl">p99 latency</div></div>
+        <div class="metric"><div class="val">Kafka</div><div class="lbl">Replaced Aeron</div></div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="arrow">↗</span>
+      <div class="org">Smartsheet · 2025</div>
+      <div class="name">MCP Tooling</div>
+      <div class="desc">Model Context Protocol servers exposing internal APIs as tools for LLM-powered automation pipelines.</div>
+      <div class="stack">
+        <span>Java</span><span>MCP</span><span>n8n</span><span>Nango</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="val">LLM</div><div class="lbl">Powered</div></div>
+        <div class="metric"><div class="val">API</div><div class="lbl">Exposure</div></div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="arrow">↗</span>
+      <div class="org">Personal · 2026</div>
+      <div class="name">Terminal Profile</div>
+      <div class="desc">A self-describing, hand-built animated terminal + telemetry banner for my GitHub profile — pure SVG/SMIL, no libraries.</div>
+      <div class="stack">
+        <span>SVG</span><span>SMIL</span><span>CSS</span>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="val">0</div><div class="lbl">Libraries</div></div>
+        <div class="metric"><div class="val">Pure</div><div class="lbl">SVG/SMIL</div></div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--dim);">Product-style cards with org/year tag, tech stack pills, and bottom metrics. Hover reveals cyan top-border accent + arrow animation. Each card links to a full project page. Metrics make each project feel like a product with measurable impact.</p>
+</section>
+
+<!-- ═══════════════════════ COMPARISON ═══════════════════════ -->
+<section class="mockup-section">
+  <h2>Comparison</h2>
+  <h3>Current Site vs Proposed v2</h3>
+
+  <table class="compare">
+    <thead>
+      <tr><th>Feature</th><th>Current (v1)</th><th class="ours">Proposed (v2)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pages</td><td>Single page scroll</td><td class="ours">5 distinct pages with transitions</td></tr>
+      <tr><td>Projects</td><td>Expandable list on hover</td><td class="ours">Grid cards → individual product pages</td></tr>
+      <tr><td>Changelog</td><td class="x">—</td><td class="ours check">Auto-populated from GitHub webhooks</td></tr>
+      <tr><td>Status bar</td><td class="x">—</td><td class="ours check">Live "shipping" indicator with last push</td></tr>
+      <tr><td>3D</td><td>2D canvas particles</td><td class="ours">Three.js network topology + particles</td></tr>
+      <tr><td>Auto-update</td><td class="x">Manual HTML edits</td><td class="ours check">Webhook → rebuild → deploy pipeline</td></tr>
+      <tr><td>Framework</td><td>Raw HTML (650 lines)</td><td class="ours">Astro + React islands</td></tr>
+      <tr><td>Easter eggs</td><td class="check">Magnifier + secrets</td><td class="ours">v2 enhancement (later)</td></tr>
+      <tr><td>Typography</td><td>Space Grotesk / Mono</td><td class="ours">Same (evolved scale)</td></tr>
+      <tr><td>Palette</td><td>Cyan accent only</td><td class="ours">Cyan (brand) + Amber (live signals)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="footer-note">
+  OPEN THIS FILE IN YOUR BROWSER TO SEE THE LIVE MOCKUPS · portfolio-website/docs/references.html
+</div>
+
+</div>
+</body>
+</html>

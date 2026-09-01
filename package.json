@@ -1,0 +1,37 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "description": "Vansh Gupta — Backend & Distributed-Systems Engineer Portfolio",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vansh482/portfolio-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vansh482/portfolio-website/issues"
+  },
+  "homepage": "https://github.com/vansh482/portfolio-website#readme",
+  "dependencies": {
+    "@astrojs/react": "^6.0.5",
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "astro": "^7.2.10",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "three": "^0.185.1",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "typescript": "^7.0.2"
+  }
+}

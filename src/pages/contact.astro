@@ -1,0 +1,191 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base title="Contact — Vansh Gupta">
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">Get in touch</div>
+
+      <div class="big-headline">
+        <div>LET'S BUILD</div>
+        <div>SOMETHING THAT</div>
+        <div class="gradient-text">STAYS UP.</div>
+      </div>
+
+      <div class="cards">
+        <a class="card" href="mailto:vansh012345gupta@gmail.com">
+          <div class="card-icon">&check;</div>
+          <div class="card-label">Email</div>
+          <div class="card-value">vansh012345gupta@gmail.com</div>
+          <span class="card-action">Send &nearr;</span>
+        </a>
+        <a class="card" href="https://www.linkedin.com/in/vansh-vg/" target="_blank" rel="noopener">
+          <div class="card-icon">in</div>
+          <div class="card-label">LinkedIn</div>
+          <div class="card-value">vansh-vg</div>
+          <span class="card-action">Open &nearr;</span>
+        </a>
+        <a class="card" href="https://github.com/vansh482" target="_blank" rel="noopener">
+          <div class="card-icon">gh</div>
+          <div class="card-label">GitHub</div>
+          <div class="card-value">vansh482</div>
+          <span class="card-action">Open &nearr;</span>
+        </a>
+        <div class="card clock-card">
+          <div class="card-icon">&circlearrowright;</div>
+          <div class="card-label">Local Time</div>
+          <div class="card-value card-clock" id="contact-clock">--:--:--</div>
+          <span class="card-action">Bangalore, IN</span>
+        </div>
+      </div>
+
+      <div class="status-row">
+        <span class="green-dot"></span>
+        <span class="status-text">Open to hard problems</span>
+      </div>
+
+      <div class="looking">Looking for L4 / E4 / SDE II roles</div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const el = document.getElementById('contact-clock');
+    if (!el) return;
+    function tick() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      el!.textContent = `${h}:${m}:${s}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  });
+</script>
+
+<style>
+  .big-headline {
+    font-size: clamp(40px, 9vw, 100px);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    display: block;
+    position: relative;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+
+  a.card:hover {
+    border-color: var(--line2);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cyan);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line2);
+    border-radius: 8px;
+    margin-bottom: 14px;
+  }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card-value {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+    word-break: break-all;
+  }
+
+  .card-action {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dimmer);
+    transition: color 0.2s;
+  }
+
+  a.card:hover .card-action {
+    color: var(--cyan);
+  }
+
+  .card-clock {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .green-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px rgba(70, 224, 139, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .status-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--green);
+  }
+
+  .looking {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--dim);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 640px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .big-headline {
+      font-size: clamp(32px, 10vw, 56px);
+    }
+  }
+</style>

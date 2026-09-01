@@ -1,0 +1,118 @@
+---
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const navLinks = [
+  { href: '/projects', label: 'Projects' },
+  { href: '/changelog', label: 'Changelog' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+
+function isActive(href: string): boolean {
+  const fullPath = `${base}${href}`.replace(/\/$/, '');
+  const current = currentPath.replace(/\/$/, '');
+  if (href === '/projects') return current.startsWith(fullPath);
+  return current === fullPath;
+}
+---
+
+<nav class="nav" transition:name="nav" transition:persist>
+  <a class="nav-brand" href={`${base}/`}>VANSH GUPTA&reg;</a>
+  <div class="nav-links">
+    {navLinks.map(link => (
+      <a
+        href={`${base}${link.href}`}
+        class:list={['nav-link', { active: isActive(link.href) }]}
+      >
+        {link.label}
+      </a>
+    ))}
+  </div>
+  <div class="nav-status">
+    <span class="nav-dot"></span>
+    open to work
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px clamp(20px, 5vw, 60px);
+    background: rgba(7, 11, 18, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: clamp(16px, 3vw, 32px);
+  }
+
+  .nav-link {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: 0.04em;
+    padding-bottom: 2px;
+    position: relative;
+    transition: color 0.3s var(--ease);
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+  }
+
+  .nav-link.active {
+    color: var(--text);
+  }
+
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(70, 224, 139, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @media (max-width: 640px) {
+    .nav-status { display: none; }
+    .nav-links { gap: 14px; }
+    .nav-link { font-size: 11px; }
+    .nav-brand { font-size: 12px; }
+  }
+</style>

@@ -1,0 +1,82 @@
+# Manual metadata for projects.
+# Key = GitHub repo name (exact match).
+# Repos without an entry here still appear in /projects — they just use GitHub defaults.
+
+connectors-3:
+  featured: true
+  category: work
+  displayName: "Connectors 3.0"
+  org: "Smartsheet"
+  year: "2025"
+  order: 1
+  longDescription: >
+    Designed and shipped the bi-directional enterprise data sync framework.
+    Dynamics 365 and ServiceNow connectors built on Nango, load-tested to
+    5M+ records. Handles full and incremental syncs with conflict resolution.
+  metrics:
+    - { label: "Records tested", value: "5M+" }
+    - { label: "Connectors", value: "2" }
+    - { label: "Sync mode", value: "Bi-dir" }
+
+event-driven-replication:
+  featured: true
+  category: work
+  displayName: "Event-Driven Replication"
+  org: "Futures First"
+  year: "2024"
+  order: 2
+  longDescription: >
+    Replaced Aeron middleware on trading servers with a Kafka + RocksDB
+    replication layer. Replayable, fault-tolerant, and cleaner recovery.
+    P99 latency stayed under 40 microseconds.
+  metrics:
+    - { label: "p99 latency", value: "<40μs" }
+    - { label: "Replaced", value: "Aeron → Kafka" }
+
+mcp-tooling:
+  featured: true
+  category: work
+  displayName: "MCP Tooling"
+  org: "Smartsheet"
+  year: "2025"
+  order: 3
+  longDescription: >
+    Model Context Protocol servers exposing internal APIs as tools for
+    LLM-powered automation pipelines. Integrated with n8n and Nango
+    for orchestration.
+  metrics:
+    - { label: "Powered by", value: "LLM" }
+    - { label: "Integration", value: "n8n + Nango" }
+
+portfolio-website:
+  featured: false
+  category: personal
+  displayName: "This Portfolio"
+  year: "2026"
+  order: 10
+
+vansh482:
+  featured: true
+  category: personal
+  displayName: "Terminal Profile"
+  year: "2026"
+  order: 4
+  longDescription: >
+    A self-describing, hand-built animated terminal + telemetry banner
+    for my GitHub profile. Pure SVG/SMIL, zero libraries.
+  metrics:
+    - { label: "Libraries", value: "0" }
+    - { label: "Tech", value: "Pure SVG/SMIL" }
+
+repo-doc-mcp:
+  featured: false
+  category: personal
+  displayName: "Repo Doc Generator"
+  year: "2025"
+
+confluence-mcp:
+  featured: false
+  category: work
+  displayName: "Confluence MCP"
+  org: "Smartsheet"
+  year: "2025"
