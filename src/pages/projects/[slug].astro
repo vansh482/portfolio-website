@@ -68,12 +68,10 @@ const totalBytes = langEntries.reduce((sum, [, bytes]) => sum + bytes, 0);
         </div>
       )}
 
-      {project.longDescription && (
-        <div class="prose">
-          <h2>What I Built</h2>
-          <p>{project.longDescription}</p>
-        </div>
-      )}
+      <div class="prose">
+        <h2>What I Built</h2>
+        <p>{project.longDescription || project.description || 'Details coming soon.'}</p>
+      </div>
 
       {project.topics.length > 0 && (
         <div class="topics">
