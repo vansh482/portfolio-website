@@ -80,7 +80,11 @@ export async function getProjects(): Promise<Project[]> {
     })
   );
 
-  return projects.sort((a, b) => a.order! - b.order!);
+  const workProjects = fallbackProjects.filter(
+    p => p.category === 'work' && !projects.some(gp => gp.slug === p.slug)
+  );
+
+  return [...workProjects, ...projects].sort((a, b) => a.order! - b.order!);
 }
 
 export async function getChangelog(): Promise<ChangelogEntry[]> {
