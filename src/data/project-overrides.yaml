@@ -1,59 +1,26 @@
 # Manual metadata for projects.
 # Key = GitHub repo name (exact match).
-# Repos without an entry here still appear in /projects — they just use GitHub defaults.
+# Repos not listed here still appear in /projects with GitHub defaults.
+# Work projects (Smartsheet/Futures First) aren't on public GitHub —
+# they're added as "virtual" projects via fallback data.
 
-connectors-3:
-  featured: true
-  category: work
-  displayName: "Connectors 3.0"
-  org: "Smartsheet"
-  year: "2025"
-  order: 1
-  longDescription: >
-    Designed and shipped the bi-directional enterprise data sync framework.
-    Dynamics 365 and ServiceNow connectors built on Nango, load-tested to
-    5M+ records. Handles full and incremental syncs with conflict resolution.
-  metrics:
-    - { label: "Records tested", value: "5M+" }
-    - { label: "Connectors", value: "2" }
-    - { label: "Sync mode", value: "Bi-dir" }
+# --- Public GitHub repos ---
 
-event-driven-replication:
+repo-doc-mcp-:
   featured: true
-  category: work
-  displayName: "Event-Driven Replication"
-  org: "Futures First"
-  year: "2024"
-  order: 2
-  longDescription: >
-    Replaced Aeron middleware on trading servers with a Kafka + RocksDB
-    replication layer. Replayable, fault-tolerant, and cleaner recovery.
-    P99 latency stayed under 40 microseconds.
-  metrics:
-    - { label: "p99 latency", value: "<40μs" }
-    - { label: "Replaced", value: "Aeron → Kafka" }
-
-mcp-tooling:
-  featured: true
-  category: work
-  displayName: "MCP Tooling"
-  org: "Smartsheet"
-  year: "2025"
+  category: personal
+  displayName: "Repo Doc Generator"
+  year: "2026"
   order: 3
   longDescription: >
-    Model Context Protocol servers exposing internal APIs as tools for
-    LLM-powered automation pipelines. Integrated with n8n and Nango
-    for orchestration.
+    AI-powered branch documentation generator — a VS Code extension
+    and MCP server that automatically generates comprehensive docs
+    for any branch in your repository. Uses Claude to analyze code
+    changes and produce structured documentation.
   metrics:
-    - { label: "Powered by", value: "LLM" }
-    - { label: "Integration", value: "n8n + Nango" }
-
-portfolio-website:
-  featured: false
-  category: personal
-  displayName: "This Portfolio"
-  year: "2026"
-  order: 10
+    - { label: "Platform", value: "VS Code" }
+    - { label: "AI", value: "Claude" }
+    - { label: "Protocol", value: "MCP" }
 
 vansh482:
   featured: true
@@ -68,15 +35,36 @@ vansh482:
     - { label: "Libraries", value: "0" }
     - { label: "Tech", value: "Pure SVG/SMIL" }
 
-repo-doc-mcp:
+portfolio-website:
   featured: false
   category: personal
-  displayName: "Repo Doc Generator"
-  year: "2025"
+  displayName: "This Portfolio"
+  year: "2026"
+  order: 5
+  longDescription: >
+    Multi-page Astro site with 3D hero scene, GitHub webhook auto-updates,
+    event-log changelog, and product-style project pages. Built with
+    Three.js, React Three Fiber, and GitHub Actions.
+  metrics:
+    - { label: "Framework", value: "Astro" }
+    - { label: "3D", value: "Three.js" }
+    - { label: "Pages", value: "12" }
 
-confluence-mcp:
+retailrush:
   featured: false
-  category: work
-  displayName: "Confluence MCP"
-  org: "Smartsheet"
+  category: personal
+  displayName: "RetailRush"
   year: "2025"
+  order: 6
+  longDescription: >
+    Webpage for retail shopping — a frontend project exploring
+    e-commerce UI patterns.
+
+PerformIT:
+  featured: false
+  category: personal
+  displayName: "PerformIT"
+  year: "2024"
+  order: 7
+  longDescription: >
+    A Java-based performance tracking and management tool.

@@ -33,14 +33,23 @@ function timeAgo(dateStr: string): string {
   return `${months}mo ago`;
 }
 
-export async function getProjects(): Promise<Project[]> {
-  const repos = await fetchRepos();
+const HIDDEN_REPOS = new Set([
+  'Java',
+  'Future_Sales_Prediction',
+  'Sales-Prediction',
+  'Road-Accident-Analysis',
+  'Amul_Parlour-main',
+]);
 
-  if (repos.length === 0) {
+export async function getProjects(): Promise<Project[]> {
+  const allRepos = await fetchRepos();
+
+  if (allRepos.length === 0) {
     console.warn('GitHub API returned no repos — using fallback data');
-    return fallbackProjects;
+    return fallbackProjects.filter(p => !HIDDEN_REPOS.has(p.name));
   }
 
+  const repos = allRepos.filter(r => !HIDDEN_REPOS.has(r.name));
   const overrides = loadOverrides();
 
   const projects: Project[] = await Promise.all(
@@ -71,7 +80,11 @@ export async function getProjects(): Promise<Project[]> {
     })
   );
 
-  return projects.sort((a, b) => a.order! - b.order!);
+  const workProjects = fallbackProjects.filter(
+    p => p.category === 'work' && !projects.some(gp => gp.slug === p.slug)
+  );
+
+  return [...workProjects, ...projects].sort((a, b) => a.order! - b.order!);
 }
 
 export async function getChangelog(): Promise<ChangelogEntry[]> {
@@ -83,7 +96,11 @@ export async function getChangelog(): Promise<ChangelogEntry[]> {
   }
 
   return events
-    .filter((e: GHEvent) => ['PushEvent', 'CreateEvent', 'ReleaseEvent'].includes(e.type))
+    .filter((e: GHEvent) => {
+      if (!['PushEvent', 'CreateEvent', 'ReleaseEvent'].includes(e.type)) return false;
+      if (e.type === 'PushEvent' && (!e.payload.commits || e.payload.commits.length === 0)) return false;
+      return true;
+    })
     .map((e: GHEvent): ChangelogEntry => {
       const repoName = e.repo.name.replace(`vansh482/`, '');
       let type: ChangelogEntry['type'] = 'other';
@@ -93,7 +110,8 @@ export async function getChangelog(): Promise<ChangelogEntry[]> {
       if (e.type === 'PushEvent') {
         type = 'push';
         const pushCommits = e.payload.commits || [];
-        message = `${pushCommits.length} commit${pushCommits.length !== 1 ? 's' : ''} to main`;
+        const branch = (e.payload.ref || 'main').replace('refs/heads/', '');
+        message = `${pushCommits.length} commit${pushCommits.length !== 1 ? 's' : ''} to ${branch}`;
         commits = pushCommits.map((c) => ({
           sha: c.sha.slice(0, 7),
           message: c.message.split('\n')[0],
