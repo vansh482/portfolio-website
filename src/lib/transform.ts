@@ -95,10 +95,21 @@ export async function getChangelog(): Promise<ChangelogEntry[]> {
     return fallbackChangelog;
   }
 
+  const seenReleases = new Set<string>();
+
   return events
     .filter((e: GHEvent) => {
       if (!['PushEvent', 'CreateEvent', 'ReleaseEvent'].includes(e.type)) return false;
+      // Skip push events with no commits (API strips them sometimes)
       if (e.type === 'PushEvent' && (!e.payload.commits || e.payload.commits.length === 0)) return false;
+      // Only show "Created repository" — skip branch/tag creation noise
+      if (e.type === 'CreateEvent' && e.payload.ref_type !== 'repository') return false;
+      // Deduplicate releases by tag name
+      if (e.type === 'ReleaseEvent') {
+        const tag = e.payload.release?.tag_name || e.id;
+        if (seenReleases.has(tag)) return false;
+        seenReleases.add(tag);
+      }
       return true;
     })
     .map((e: GHEvent): ChangelogEntry => {
@@ -119,11 +130,7 @@ export async function getChangelog(): Promise<ChangelogEntry[]> {
         }));
       } else if (e.type === 'CreateEvent') {
         type = 'create';
-        if (e.payload.ref_type === 'repository') {
-          message = 'New repository';
-        } else {
-          message = `Created ${e.payload.ref_type} ${e.payload.ref || ''}`.trim();
-        }
+        message = 'New repository';
       } else if (e.type === 'ReleaseEvent') {
         type = 'release';
         message = e.payload.release?.tag_name

@@ -1,4 +1,5 @@
 ---
+import ThemeToggle from './ThemeToggle.astro';
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -29,9 +30,12 @@ function isActive(href: string): boolean {
       </a>
     ))}
   </div>
-  <div class="nav-status">
-    <span class="nav-dot"></span>
-    open to work
+  <div class="nav-right">
+    <ThemeToggle />
+    <div class="nav-status">
+      <span class="nav-dot"></span>
+      open to work
+    </div>
   </div>
 </nav>
 
@@ -44,7 +48,7 @@ function isActive(href: string): boolean {
     justify-content: space-between;
     align-items: center;
     padding: 16px clamp(20px, 5vw, 60px);
-    background: rgba(7, 11, 18, 0.8);
+    background: color-mix(in srgb, var(--ink) 85%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line);
@@ -89,6 +93,12 @@ function isActive(href: string): boolean {
     right: 0;
     height: 1px;
     background: var(--cyan);
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
 
   .nav-status {

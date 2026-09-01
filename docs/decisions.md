@@ -5,7 +5,9 @@
 
 ## Current Status (2026-09-01)
 
-**BUILD STATUS: COMPLETE — all pages built, production build passes (12 pages in 2.68s)**
+**BUILD STATUS: COMPLETE — all pages built, production build passes (11 pages)**
+**DEPLOY STATUS: Live on GitHub Pages (vansh482.github.io/portfolio-website)**
+**BRANCH: main (all changes merged)**
 
 What's done:
 - Astro project scaffolded with React integration
@@ -18,13 +20,25 @@ What's done:
 - GitHub Actions deploy pipeline (.github/workflows/deploy.yml)
 - Webhook setup documentation (docs/webhook-setup.md)
 
+What's added since initial build:
+- Light/dark theme toggle (persists across navigation via localStorage + astro:before-swap)
+- 3D solar system (light) / Earth+Moon (dark) — theme-aware, draggable planets with spring physics
+- Custom cursor (cyan dot + ring, hover expansion, click shrink)
+- Project data from real work repos (scanned local Smartsheet/Futures First repos)
+- Work projects always injected (Connectors 3.0, Event-Driven Replication, MCP Tooling)
+- Changelog filters fixed (no branch create noise, deduplicated releases)
+- Hero repositioned for AI/agentic FDE roles
+
 What's NOT done yet (future sessions):
-- View count / like button (needs Supabase or similar — user chose to skip for now)
+- **PRIORITY: Resend-level visual polish** — user wants both themes to match resend.com quality. Needs: environment maps for 3D (HDRI), PBR materials, proper lighting, custom shaders. Theme colors need professional-grade tuning. Fetch resend.com CSS values as reference.
+- **PRIORITY: 3D interactivity** — planets should be more obviously draggable, snap-back more satisfying. Consider @react-three/rapier for physics. Look at Resend's 3D implementation for reference.
+- Light theme contrast still needs work — some text areas feel washed out
+- View count / like button (needs Supabase or similar)
 - Custom domain setup
 - Migration from GitHub Pages to Vercel/Cloudflare
 - Magnifier easter egg (from v1)
-- Theme variations (user interested in Railway/Resend/Linear themes)
 - SEO optimization (sitemap, structured data)
+- Mobile testing pass (responsive styles exist but untested on real devices)
 
 ## Project Overview
 
