@@ -75,6 +75,7 @@ export async function getProjects(): Promise<Project[]> {
         year: override.year ?? new Date(repo.created_at).getFullYear().toString(),
         metrics: override.metrics,
         longDescription: override.longDescription,
+        highlights: override.highlights,
         order: override.order ?? 999,
       };
     })
