@@ -119,10 +119,11 @@ export const fallbackProjects: Project[] = [
     displayName: 'Terminal Profile',
     year: '2026',
     order: 5,
-    longDescription: 'A self-describing, hand-built animated terminal + telemetry banner for my GitHub profile. Pure SVG/SMIL, zero libraries.',
+    longDescription: 'A self-describing, hand-built animated terminal + telemetry banner for my GitHub profile. Pure SVG/SMIL animation — no JavaScript, no build step, no libraries. Every frame is hand-crafted markup.',
     metrics: [
-      { label: 'Libraries', value: '0' },
-      { label: 'Tech', value: 'Pure SVG/SMIL' },
+      { label: 'Approach', value: 'Zero-dep' },
+      { label: 'Tech', value: 'SVG + SMIL' },
+      { label: 'JS Used', value: 'None' },
     ],
   },
   // --- Personal: This Portfolio ---
