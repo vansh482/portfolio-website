@@ -73,6 +73,17 @@ const totalBytes = langEntries.reduce((sum, [, bytes]) => sum + bytes, 0);
         <p>{project.longDescription || project.description || 'Details coming soon.'}</p>
       </div>
 
+      {project.highlights && project.highlights.length > 0 && (
+        <div class="highlights">
+          <h3 class="highlights-title">Key Highlights</h3>
+          <ul class="highlights-list">
+            {project.highlights.map(h => (
+              <li class="highlight-item">{h}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {project.topics.length > 0 && (
         <div class="topics">
           <h3 class="topics-title">Topics</h3>
@@ -234,6 +245,49 @@ const totalBytes = langEntries.reduce((sum, [, bytes]) => sum + bytes, 0);
     font-size: 16px;
     color: var(--dim);
     line-height: 1.7;
+  }
+
+  .highlights {
+    margin-bottom: 40px;
+    padding: 28px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  .highlights-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .highlights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .highlight-item {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .highlight-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
   }
 
   .topics { margin-bottom: 40px; }

@@ -16,6 +16,7 @@ export interface Project {
   year?: string;
   metrics?: { label: string; value: string }[];
   longDescription?: string;
+  highlights?: string[];
   order?: number;
 }
 
@@ -48,6 +49,7 @@ export interface ProjectOverride {
   org?: string;
   year?: string;
   longDescription?: string;
+  highlights?: string[];
   metrics?: { label: string; value: string }[];
   order?: number;
 }
