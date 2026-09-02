@@ -22,22 +22,22 @@
 }
 
 [data-theme="light"] {
-  --ink: #D6D2C9;
-  --panel: #E8E4DB;
-  --panel2: #D0CCC3;
-  --line: #B8B3A8;
-  --line2: #A39E93;
-  --text: #0F0E0C;
-  --dim: #3D3A36;
-  --dimmer: #78746D;
-  --cyan: #0C635C;
-  --blue: #1A3FB0;
-  --indigo: #5B21B6;
-  --amber: #92400E;
-  --green: #166534;
-  --red: #991B1B;
-  --accent-primary: #0F0E0C;
-  --accent-secondary: #3D3A36;
+  --ink: #F0EDE6;
+  --panel: #FAFAF7;
+  --panel2: #E6E3DC;
+  --line: #CCC9C0;
+  --line2: #B5B1A8;
+  --text: #1A1816;
+  --dim: #4A4744;
+  --dimmer: #8A8580;
+  --cyan: #0D7377;
+  --blue: #1D4ED8;
+  --indigo: #6D28D9;
+  --amber: #A16207;
+  --green: #15803D;
+  --red: #B91C1C;
+  --accent-primary: #1A1816;
+  --accent-secondary: #4A4744;
 }
 
 *, *::before, *::after {
@@ -118,8 +118,8 @@ img {
 }
 
 [data-theme="light"] ::selection {
-  background: #1C1917;
-  color: #F5F2EB;
+  background: #1A1816;
+  color: #F0EDE6;
 }
 
 @keyframes pulse {

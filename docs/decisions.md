@@ -30,15 +30,30 @@ What's added since initial build:
 - Hero repositioned for AI/agentic FDE roles
 
 What's NOT done yet (future sessions):
-- **PRIORITY: Resend-level visual polish** — user wants both themes to match resend.com quality. Needs: environment maps for 3D (HDRI), PBR materials, proper lighting, custom shaders. Theme colors need professional-grade tuning. Fetch resend.com CSS values as reference.
-- **PRIORITY: 3D interactivity** — planets should be more obviously draggable, snap-back more satisfying. Consider @react-three/rapier for physics. Look at Resend's 3D implementation for reference.
-- Light theme contrast still needs work — some text areas feel washed out
-- View count / like button (needs Supabase or similar)
+
+### HIGH PRIORITY
+
+- **Resend-level visual polish** — user wants both themes to match resend.com quality. Needs: proper color palette tuning, spacing, typography refinement. Fetch resend.com actual CSS as reference. Both dark AND light themes need this treatment.
+
+- **3D as full-page immersive background** — instead of 3D in a small panel on the right, make the entire page background a 3D space. Text and content float OVER the 3D scene. The 3D scene is fixed-position, content scrolls above it. Think: a starfield or solar system that fills the viewport, with all portfolio content layered on top.
+
+- **3D interactivity** — planets should be clearly draggable, snap-back more satisfying. Consider @react-three/rapier for physics. Look at Resend's 3D implementation for quality reference.
+
+- **Project pages need more depth** — each project (work and personal) needs more illustrative, contextual content. Not just a description paragraph — show architecture diagrams, key decisions, impact metrics, screenshots or diagrams. Make each project page feel like a case study, not a README.
+
+### MEDIUM PRIORITY
+
+- Light theme contrast needs further tuning
+- View count / like button (needs Supabase or similar backend)
 - Custom domain setup
 - Migration from GitHub Pages to Vercel/Cloudflare
+
+### LOW PRIORITY
+
 - Magnifier easter egg (from v1)
 - SEO optimization (sitemap, structured data)
-- Mobile testing pass (responsive styles exist but untested on real devices)
+- Mobile testing on real devices
+- Blog/writing section
 
 ## Project Overview
 
